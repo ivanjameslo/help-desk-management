@@ -32,7 +32,7 @@ export function AppSidebar() {
   return (
     <aside className="min-h-screen w-64 shrink-0 border-r bg-white">
       <div className="border-b p-6">
-        <Link href="/dashboard" className="text-xl font-bold">
+        <Link href="/dashboard" className="text-xl font-bold text-black">
           HelpDesk
         </Link>
 

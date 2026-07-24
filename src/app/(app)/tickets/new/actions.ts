@@ -5,6 +5,7 @@ import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { auth } from "@/auth";
 
 import { prisma } from "@/lib/prisma";
 import { createTicketSchema, type CreateTicketState } from "@/lib/validations/ticket";
@@ -36,26 +37,25 @@ export async function createTicket(
         priority,
     } = validatedFields.data;
 
-    /*
-   * Temporary development user.
-   *
-   * Authentication will eventually replace this lookup
-   * with the currently logged-in user's ID.
-   */
+    const session = await auth();
+
+    if (!session?.user?.id) {
+        redirect("/login");
+    }
 
     const requester = await prisma.user.findUnique({
         where: {
-            email: "requester@helpdesk.local",
+            id: session.user.id,
+            isActive: true,
         },
         select: {
             id: true,
-            isActive: true,
-        }
+        },
     });
 
-    if (!requester || !requester.isActive) {
+    if (!requester) {
         return {
-            message: "The development requester account could not be found.",
+            message: "Your user account is unavailable or inactive.",
         };
     }
 

@@ -12,6 +12,10 @@ const credentialsSchema = z.object({
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     // trustHost: true,
+
+    pages: {
+        signIn: "/login"
+    },
     
     session: {
         strategy: "jwt",
@@ -23,7 +27,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 email: {
                     label: "Email",
                     type: "email",
-                    placeholder: "requester@helpdesk.local"
+                    // placeholder: "requester@helpdesk.local"
                 },
 
                 password: {
@@ -50,6 +54,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         name: true,
                         email: true,
                         passwordHash: true,
+                        role: true,
                         isActive: true,
                     },
                 });
@@ -71,8 +76,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     id: user.id,
                     name: user.name,
                     email: user.email,
+                    role: user.role,
                 };
             },
         }),
     ],
+
+    callbacks: {
+        jwt({ token, user }) {
+            if (user) {
+                token.role = user.role;
+            }
+
+            return token;
+        },
+
+        session({ session, token }) {
+            if (token.sub) {
+                session.user.id = token.sub;
+            }
+
+            if (token.role) {
+                session.user.role = token.role;
+            }
+
+            return session;
+        },
+    },
 });

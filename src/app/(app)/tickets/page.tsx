@@ -4,26 +4,25 @@ import { prisma } from "@/lib/prisma";
 import { UserRole } from "@/generated/prisma/client";
 import { requireUser } from "@/lib/auth-guards";
 
-function formatLabel(value: string) {
-  return value
-    .toLowerCase()
-    .replaceAll("_", " ")
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
-}
+import { formatDate, formatEnumLabel } from "@/lib/formatters";
 
 export default async function TicketsPage() {
   const user = await requireUser();
 
   const tickets = await prisma.ticket.findMany({
+
+     /*
+     * Requesters can only retrieve tickets they created.
+     * Agents and administrators receive all tickets because
+     * their where condition becomes undefined.
+     */
+
     where: 
       user.role === UserRole.REQUESTER 
         ? {
             requesterId: user.id
           }
         : undefined,
-        
-      // Prisma returns only tickets belonging to that user.
-      // Undefined: No ownership filter is applied, so all tickets are returned.
    
       orderBy: {
       createdAt: "desc",
@@ -60,12 +59,14 @@ export default async function TicketsPage() {
           </p>
         </div>
 
-        <Link
-          href="/tickets/new"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
-        >
-          Create Ticket
-        </Link>
+        {user.role === UserRole.REQUESTER && (
+          <Link
+            href="/tickets/new"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
+          >
+            Create Ticket
+          </Link>
+        )}
       </div>
 
       <div className="mt-8 overflow-hidden rounded-xl border bg-white shadow-sm">
@@ -76,7 +77,9 @@ export default async function TicketsPage() {
             </h2>
 
             <p className="mt-2 text-sm text-gray-500">
-              Create your first ticket to get started.
+              {user.role === UserRole.REQUESTER
+                ? "Create your first ticket to get started."
+                : "There are currently no help desk tickets."}
             </p>
           </div>
         ): (
@@ -101,13 +104,18 @@ export default async function TicketsPage() {
                     className="transition hover:bg-gray-50"
                   >
                     <td className="px-6 py-4">
-                      <p className="font-medium text-gray-900">
-                        {ticket.subject}
-                      </p>
+                      <Link
+                        href={`/tickets/${ticket.id}`}
+                        className="group block"
+                      >
+                        <p className="font-medium text-gray-900 transition group-hover:text-slate-600">
+                          {ticket.subject}
+                        </p>
 
-                      <p className="mt-1 text-xs text-gray-500">
-                        {ticket.ticketNumber}
-                      </p>
+                        <p className="mt-1 text-xs text-gray-500">
+                          {ticket.ticketNumber}
+                        </p>
+                      </Link>
                     </td>
 
                     <td className="px-6 py-4 text-gray-600">
@@ -120,13 +128,13 @@ export default async function TicketsPage() {
 
                     <td className="px-6 py-4">
                       <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
-                        {formatLabel(ticket.priority)}
+                        {formatEnumLabel(ticket.priority)}
                       </span>
                     </td>
 
                     <td className="px-6 py-4">
                       <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
-                        {formatLabel(ticket.status)}
+                        {formatEnumLabel(ticket.status)}
                       </span>
                     </td>
 
@@ -135,11 +143,7 @@ export default async function TicketsPage() {
                     </td>
 
                     <td className="px-6 py-4 text-gray-600">
-                      {new Intl.DateTimeFormat("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      }).format(ticket.createdAt)}
+                      {formatDate(ticket.createdAt)}
                     </td>
                   </tr>
                 ))}

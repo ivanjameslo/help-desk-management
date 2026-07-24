@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import Link from "next/link";
 
 import { UserRole } from "@/generated/prisma/client";
 import { requireUser } from "@/lib/auth-guards";
@@ -129,9 +130,12 @@ export default async function DashboardPage() {
                 className="flex items-start justify-between gap-4 p-6"
               >
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">
+                  <Link
+                    href={`/tickets/${ticket.id}`}
+                    className="text-sm font-semibold text-gray-900 transition hover:text-slate-600"
+                  >
                     {ticket.ticketNumber} — {ticket.subject}
-                  </p>
+                  </Link>
 
                   <p className="mt-1 text-sm text-gray-500">
                     Requested by {ticket.requester.name}

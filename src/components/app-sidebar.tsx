@@ -3,36 +3,81 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const navigation = [
+import { UserRole } from "@/generated/prisma/enums";
+
+type AppSidebarProps = {
+  role: UserRole;
+};
+
+type NavigationItem = {
+  label: string,
+  href: string,
+  allowedRoles: UserRole[],
+};
+
+const allRoles: UserRole[] = [
+  "REQUESTER",
+  "AGENT",
+  "ADMIN",
+];
+
+const navigation: NavigationItem[] = [
   {
     label: "Dashboard",
     href: "/dashboard",
+    allowedRoles: allRoles,
   },
   {
     label: "Tickets",
     href: "/tickets",
+    allowedRoles: allRoles,
   },
   {
     label: "Create Ticket",
     href: "/tickets/new",
+    allowedRoles: ["REQUESTER"]
   },
   {
     label: "Manage Users",
     href: "/admin/users",
+    allowedRoles: ["ADMIN"]
   },
   {
     label: "Categories",
     href: "/admin/categories",
+    allowedRoles: ["ADMIN"],
   },
 ];
 
-export function AppSidebar() {
+function isRouteActive(pathname: string, href: string){
+  if (href === "/tickets/new") {
+    return pathname === "/tickets/new"
+  }
+
+  if (href === "/tickets") {
+    return (
+      pathname === "/tickets" ||
+      (pathname.startsWith("/tickets/") && pathname !== "/tickets/new")
+    );
+  }
+
+  return (
+    pathname === href || pathname.startsWith(`${href}/`)
+  );
+}
+
+export function AppSidebar({ role, }: AppSidebarProps) {
   const pathname = usePathname();
+
+  const visibleNavigation = navigation.filter((item) => item.allowedRoles.includes(role),); 
 
   return (
     <aside className="min-h-screen w-64 shrink-0 border-r bg-white">
       <div className="border-b p-6">
-        <Link href="/dashboard" className="text-xl font-bold text-black">
+        <Link 
+          href="/dashboard" 
+          className="text-xl font-bold text-black"
+        >
           HelpDesk
         </Link>
 
@@ -42,11 +87,11 @@ export function AppSidebar() {
       </div>
 
       <nav className="space-y-1 p-4">
-        {navigation.map((item) => {
-          const isActive =
-            item.href === "/dashboard"
-              ? pathname === item.href
-              : pathname.startsWith(item.href);
+        {visibleNavigation.map((item) => {
+          const isActive = isRouteActive(
+            pathname,
+            item.href
+          )
 
           return (
             <Link

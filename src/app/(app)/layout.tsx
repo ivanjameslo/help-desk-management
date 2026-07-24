@@ -1,27 +1,22 @@
 import type { ReactNode } from "react";
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 
-import { auth, signOut } from "@/auth";
+import { signOut } from "@/auth";
 import { AppSidebar } from "@/components/app-sidebar";
+import { requireUser } from "@/lib/auth-guards";
 
 type AppLayoutProps = {
   children: ReactNode;
 };
 
 export default async function AppLayout({ children }: AppLayoutProps) {
-  const session = await auth();
+  const user = await requireUser();
 
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  const roleLabel = session.user.role
-    ? session.user.role.toLowerCase().replaceAll("_", " ")
-    : "User";
+  const roleLabel = user.role.toLowerCase().replaceAll("_", " ");
 
   return (
     <div className="flex min-h-screen bg-slate-50">
-      <AppSidebar />
+      <AppSidebar role={user.role} />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex min-h-16 items-center justify-between border-b bg-white px-6">
@@ -32,7 +27,7 @@ export default async function AppLayout({ children }: AppLayoutProps) {
           <div className="flex items-center gap-4">
             <div className="text-right">
               <p className="text-sm font-medium text-gray-900">
-                {session.user.name}
+                {user.name}
               </p>
 
               <p className="text-xs text-gray-500">

@@ -1,7 +1,12 @@
 import { CreateTicketForm } from "@/components/tickets/create-ticket-form";
 import { prisma } from "@/lib/prisma"
 
+import { UserRole } from "@/generated/prisma/client";
+import { requireRole } from "@/lib/auth-guards";
+
 export default async function NewTicketsPage() {
+  await requireRole([UserRole.REQUESTER]);
+  
   const categories = await prisma.category.findMany({
     where: {
       isActive: true,

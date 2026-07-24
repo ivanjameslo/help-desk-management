@@ -5,7 +5,8 @@ import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { auth } from "@/auth";
+import { UserRole } from "@/generated/prisma/client";
+import { requireRole } from "@/lib/auth-guards";
 
 import { prisma } from "@/lib/prisma";
 import { createTicketSchema, type CreateTicketState } from "@/lib/validations/ticket";
@@ -37,32 +38,19 @@ export async function createTicket(
         priority,
     } = validatedFields.data;
 
-    const session = await auth();
+    /*
+    * Confirms that the current user is logged in,
+    * active, and has the REQUESTER role.
+    *
+    * The returned requester is the current database user.
+    */
 
-    if (!session?.user?.id) {
-        redirect("/login");
-    }
-
-    const requester = await prisma.user.findUnique({
-        where: {
-            id: session.user.id,
-            isActive: true,
-        },
-        select: {
-            id: true,
-        },
-    });
-
-    if (!requester) {
-        return {
-            message: "Your user account is unavailable or inactive.",
-        };
-    }
+    const requester = await requireRole([
+        UserRole.REQUESTER
+    ]);
 
     /*
-    * Do not trust categoryId simply because it came from
-    * a select element. Verify that the category exists and
-    * is active.
+    * Verify that the submitted category exists and remains active.
     */
 
     const category = await prisma.category.findFirst({

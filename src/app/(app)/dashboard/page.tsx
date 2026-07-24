@@ -1,6 +1,18 @@
 import { prisma } from "@/lib/prisma";
 
+import { UserRole } from "@/generated/prisma/client";
+import { requireUser } from "@/lib/auth-guards";
+
 export default async function DashboardPage() {
+  const user = await requireUser();
+
+  const ticketOwnershipFilter = 
+    user.role === UserRole.REQUESTER
+      ? {
+        requesterId: user.id
+        }
+      : {};
+
   const [
     openTickets,
     inProgressTickets,
@@ -10,29 +22,34 @@ export default async function DashboardPage() {
   ] = await Promise.all([
     prisma.ticket.count({
       where: {
+        ...ticketOwnershipFilter,
         status: "OPEN",
       },
     }),
 
     prisma.ticket.count({
       where: {
+        ...ticketOwnershipFilter,
         status: "IN_PROGRESS",
       },
     }),
 
     prisma.ticket.count({
       where: {
+        ...ticketOwnershipFilter,
         status: "WAITING_FOR_USER",
       },
     }),
 
     prisma.ticket.count({
       where: {
+        ...ticketOwnershipFilter,
         status: "RESOLVED",
       },
     }),
 
     prisma.ticket.findMany({
+      where: ticketOwnershipFilter,
       take: 5,
       orderBy: {
         createdAt: "desc",

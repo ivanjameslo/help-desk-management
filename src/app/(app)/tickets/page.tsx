@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import { prisma } from "@/lib/prisma";
+import { UserRole } from "@/generated/prisma/client";
+import { requireUser } from "@/lib/auth-guards";
 
 function formatLabel(value: string) {
   return value
@@ -10,8 +12,20 @@ function formatLabel(value: string) {
 }
 
 export default async function TicketsPage() {
+  const user = await requireUser();
+
   const tickets = await prisma.ticket.findMany({
-    orderBy: {
+    where: 
+      user.role === UserRole.REQUESTER 
+        ? {
+            requesterId: user.id
+          }
+        : undefined,
+        
+      // Prisma returns only tickets belonging to that user.
+      // Undefined: No ownership filter is applied, so all tickets are returned.
+   
+      orderBy: {
       createdAt: "desc",
     },
     include: {

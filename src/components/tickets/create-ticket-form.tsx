@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 
-import { createTicket } from "@/app/(app)/tickets/new/action";
+import { createTicket } from "@/app/(app)/tickets/new/actions";
 import { CreateTicketState } from "@/lib/validations/ticket";
 
 type CategoryOption = {

@@ -2,10 +2,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { TicketManagementForm } from "@/components/tickets/ticket-management-form";
-import { UserRole } from "@/generated/prisma/enums";
+import { UserRole, TicketStatus } from "@/generated/prisma/enums";
 import { formatDateTime, formatEnumLabel } from "@/lib/formatters";
 import { requireUser } from "@/lib/auth-guards";
 import { prisma } from "@/lib/prisma";
+import { TicketCommentForm } from "@/components/tickets/ticket-comment-form";
 
 type TicketDetailsPageProps = {
     params: Promise<{
@@ -40,6 +41,33 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
                 select: {
                     id: true,
                     name: true,
+                },
+            },
+            comments: {
+                where: 
+                    user.role === UserRole.REQUESTER 
+                        ? { 
+                            isInternal : false 
+                          } 
+                        : undefined,
+
+                orderBy: {
+                    createdAt: "asc",
+                },
+
+                select: {
+                    id: true,
+                    content: true,
+                    isInternal: true,
+                    createdAt: true,
+
+                    author: {
+                        select: {
+                            id: true,
+                            name: true,
+                            role: true,
+                        },
+                    },
                 },
             },
         },
@@ -121,15 +149,80 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
             </div>
 
             <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-                <section className="rounded-xl border bg-white p-6 shadow-sm">
-                    <h2 className="text-lg font-semibold text-gray-900">
-                        Description
-                    </h2>
+                <div className="space-y-6">
+                    <section className="rounded-xl border bg-white p-6 shadow-sm">
+                        <h2 className="text-lg font-semibold text-gray-900">
+                            Description
+                        </h2>
 
-                    <p className="mt-4 whitespace-pre-wrap text-sm leading-7 text-gray-700">
-                        {ticket.description}
-                    </p>
-                </section> 
+                        <p className="mt-4 whitespace-pre-wrap text-sm leading-7 text-gray-700">
+                            {ticket.description}
+                        </p>
+                    </section> 
+
+                    <section className="rounded-xl border bg-white p-6 shadow-sm">
+                        <h2 className="text-lg font-semibold text-gray-900">
+                            Conversation
+                        </h2>
+
+                        {ticket.comments.length === 0 ? (
+                            <p className="mt-4 text-sm text-gray-500">
+                            No replies have been added yet.
+                            </p>
+                        ) : (
+                            <div className="mt-5 space-y-4">
+                                {ticket.comments.map((comment) => (
+                                    <article
+                                        key={comment.id}
+                                        className={`rounded-xl border p-4 ${
+                                            comment.isInternal
+                                            ? "border-amber-200 bg-amber-50"
+                                            : "bg-gray-50"
+                                        }`}
+                                    >
+                                        <div className="flex flex-wrap items-start justify-between gap-3">
+                                            <div>
+                                                <p className="text-sm font-semibold text-gray-900">
+                                                    {comment.author.name}
+                                                </p>
+
+                                                <p className="mt-1 text-xs text-gray-500">
+                                                    {formatEnumLabel(comment.author.role)}
+                                                    {" · "}
+                                                    {formatDateTime(comment.createdAt)}
+                                                </p>
+                                            </div>
+
+                                            {comment.isInternal && (
+                                            <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-800">
+                                                Internal Note
+                                            </span>
+                                            )}
+                                        </div>
+
+                                        <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-gray-700">
+                                            {comment.content}
+                                        </p>
+                                    </article>
+                                ))}
+                            </div>
+                        )}
+                    </section>
+
+                   {/* Reply form or closed-ticket notice */}
+                   {ticket.status === TicketStatus.CLOSED ? (
+                        <div className="rounded-xl border bg-gray-50 p-6">
+                            <p className="text-sm text-gray-600">
+                                This ticket is closed. An agent must reopen it before another reply can be added.
+                            </p>
+                        </div>
+                   ) : (
+                    <TicketCommentForm 
+                        ticketId={ticket.id}
+                        canCreateInternalNote={canManageTicket}
+                    />
+                   )} 
+                </div>
 
                 <aside className="space-y-6">
                     <section className="rounded-xl border bg-white p-6 shadow-sm">

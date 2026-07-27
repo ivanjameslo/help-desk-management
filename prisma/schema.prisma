@@ -39,8 +39,9 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  requestedTickets Ticket[] @relation("RequestedTickets")
-  assignedTickets  Ticket[] @relation("AssignedTickets")
+  requestedTickets Ticket[]        @relation("RequestedTickets")
+  assignedTickets  Ticket[]        @relation("AssignedTickets")
+  comments         TicketComment[]
 }
 
 model Category {
@@ -69,13 +70,31 @@ model Ticket {
   resolvedAt      DateTime?
   closedAt        DateTime?
 
-  requester     User     @relation("RequestedTickets", fields: [requesterId], references: [id], onDelete: Restrict)
-  assignedAgent User?    @relation("AssignedTickets", fields: [assignedAgentId], references: [id], onDelete: SetNull)
-  category      Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  requester     User            @relation("RequestedTickets", fields: [requesterId], references: [id], onDelete: Restrict)
+  assignedAgent User?           @relation("AssignedTickets", fields: [assignedAgentId], references: [id], onDelete: SetNull)
+  category      Category        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  comments      TicketComment[]
 
   @@index([status])
   @@index([priority])
   @@index([requesterId])
   @@index([assignedAgentId])
   @@index([categoryId])
+}
+
+model TicketComment {
+  id         String   @id @default(cuid())
+  content    String
+  isInternal Boolean  @default(false)
+  ticketId   String
+  authorId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([ticketId, createdAt])
+  @@index([authorId])
 }

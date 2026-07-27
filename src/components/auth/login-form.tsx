@@ -29,7 +29,7 @@ export function LoginForm() {
                     required
                     autoComplete="email"
                     placeholder="requester@helpdesk.local"
-                    className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-slate-700"
+                    className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-slate-700"
                 />
             </div>
 
@@ -46,7 +46,7 @@ export function LoginForm() {
                     type="password"
                     required
                     autoComplete="current-password"
-                    className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-slate-700"
+                    className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-slate-700"
                 />
             </div>
 

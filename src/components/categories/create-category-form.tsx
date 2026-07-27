@@ -53,7 +53,7 @@ export function CreateCategoryForm() {
                         maxLength={80}
                         placeholder="For example: Hardware Support"
                         aria-describedby="new-category-name-error"
-                        className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     />
 
                     <div
@@ -87,7 +87,7 @@ export function CreateCategoryForm() {
                         maxLength={500}
                         placeholder="Describe the concerns covered by this category."
                         aria-describedby="new-category-description-error"
-                        className="mt-2 w-full resize-y rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black resize-y rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     />
 
                     <div

@@ -87,7 +87,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
                         minLength={2}
                         maxLength={80}
                         defaultValue={category.name}
-                        className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     />
 
                     {state.errors?.name?.map((error) => (
@@ -114,7 +114,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
                         rows={3}
                         maxLength={500}
                         defaultValue={category.description ?? ""}
-                        className="mt-2 w-full resize-y rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black resize-y rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     />
 
                     {state.errors?.description?.map(

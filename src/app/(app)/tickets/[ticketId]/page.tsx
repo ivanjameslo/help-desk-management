@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { TicketManagementForm } from "@/components/tickets/ticket-management-form";
 import { UserRole } from "@/generated/prisma/enums";
 import { formatDateTime, formatEnumLabel } from "@/lib/formatters";
 import { requireUser } from "@/lib/auth-guards";
@@ -62,6 +63,27 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
     if (!isRequesterOwner && !canViewAllTickets) {
         notFound();
     }
+
+    const canManageTicket = 
+        user.role === UserRole.AGENT ||
+        user.role === UserRole.ADMIN;
+
+    const agents = canManageTicket
+        ? await prisma.user.findMany({
+            where: {
+                role: UserRole.AGENT,
+                isActive: true,
+            },
+            orderBy: {
+                name: "asc",
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+            },
+        })
+    : [];
 
     return (
         <div className="mx-auto max-w-5xl">
@@ -149,7 +171,10 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
                             </div>
 
                             <div>
-                                <dt className="text-gray-500">Last Updated</dt>
+                                <dt className="text-gray-500">
+                                    Last Updated
+                                </dt>
+
                                 <dd className="mt-1 font-medium text-gray-900">
                                     {formatDateTime(ticket.updatedAt)}
                                 </dd>
@@ -157,7 +182,10 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
 
                             {ticket.resolvedAt && (
                                 <div>
-                                    <dt className="text-gray-500">Resolved</dt>
+                                    <dt className="text-gray-500">
+                                        Resolved
+                                    </dt>
+
                                     <dd className="mt-1 font-medium text-gray-900">
                                         {formatDateTime(ticket.resolvedAt)}
                                     </dd>
@@ -166,7 +194,10 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
 
                             {ticket.closedAt && (
                                 <div>
-                                    <dt className="text-gray-500">Closed</dt>
+                                    <dt className="text-gray-500">
+                                        Closed
+                                    </dt>
+
                                     <dd className="mt-1 font-medium text-gray-900">
                                         {formatDateTime(ticket.closedAt)}
                                     </dd>
@@ -174,6 +205,19 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
                             )}
                         </dl>
                     </section>
+
+                    {canManageTicket && (
+                        <TicketManagementForm
+                        ticket={{
+                            id: ticket.id,
+                            status: ticket.status,
+                            priority: ticket.priority,
+                            assignedAgentId:
+                            ticket.assignedAgentId,
+                        }}
+                        agents={agents}
+                        />
+                    )}
                 </aside> 
             </div>
         </div>

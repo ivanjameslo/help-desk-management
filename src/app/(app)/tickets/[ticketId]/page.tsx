@@ -70,6 +70,36 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
                     },
                 },
             },
+            activities: {
+                where:
+                    user.role === UserRole.REQUESTER
+                        ? {
+                            isInternal: false,
+                          }
+                        : undefined,
+
+                orderBy: {
+                    createdAt: "desc",
+                },
+
+                select: {
+                    id: true,
+                    type: true,
+                    description: true,
+                    oldValue: true,
+                    newValue: true,
+                    isInternal: true,
+                    createdAt: true,
+
+                    performedBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                            role: true,
+                        },
+                    },
+                },
+            },
         },
     });
 
@@ -297,6 +327,37 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
                                 </div>
                             )}
                         </dl>
+                    </section>
+
+                    <section className="rounded-xl border bg-white p-6 shadow-sm">
+                        <h2 className="font-semibold text-gray-900">
+                            Activity History
+                        </h2>
+
+                        {ticket.activities.length === 0 ? (
+                            <p className="mt-4 text-sm text-gray-500">
+                                No activity has been recorded yet.
+                            </p>
+                        ) : (
+                            <ol className="mt-5 space-y-5">
+                                {ticket.activities.map((activity) => (
+                                    <li
+                                        key={activity.id}
+                                        className="relative border-l border-gray-200 pl-5"
+                                    >
+                                        <span className="absolute -left-1.5 top-1 size-3 rounded-full border-2 border-white bg-slate-400" />
+
+                                        <p className="text-sm leading-6 text-gray-700">
+                                            {activity.description}
+                                        </p>
+
+                                        <p className="mt-1 text-xs text-gray-500">
+                                            {formatDateTime(activity.createdAt)}
+                                        </p>
+                                    </li>
+                                ))}
+                            </ol>
+                        )}
                     </section>
 
                     {canManageTicket && (

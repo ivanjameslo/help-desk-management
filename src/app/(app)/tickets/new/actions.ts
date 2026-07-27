@@ -5,8 +5,9 @@ import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { UserRole } from "@/generated/prisma/client";
+import { TicketActivityType, UserRole } from "@/generated/prisma/enums";
 import { requireRole } from "@/lib/auth-guards";
+
 
 import { prisma } from "@/lib/prisma";
 import { createTicketSchema, type CreateTicketState } from "@/lib/validations/ticket";
@@ -73,18 +74,29 @@ export async function createTicket(
     }
 
     try {
-        await prisma.ticket.create({
-            data: {
-                ticketNumber: `HD-${randomUUID()
-                    .slice(0, 8)
-                    .toUpperCase()
-                }`,
-                subject,
-                description,
-                priority,
-                requesterId: requester.id,
-                categoryId: category.id,
-            },
+        await prisma.$transaction(async (transaction) => {
+            const ticket = await transaction.ticket.create({
+                data: {
+                    ticketNumber: `HD-${randomUUID()
+                        .slice(0, 8)
+                        .toUpperCase()}`,
+                    subject,
+                    description,
+                    priority,
+                    requesterId: requester.id,
+                    categoryId: category.id,
+                },
+            });
+
+            await transaction.ticketActivity.create({
+                data: {
+                    type: TicketActivityType.CREATED,
+                    description: `${requester.name} created the ticket.`,
+                    newValue: ticket.status,
+                    ticketId: ticket.id,
+                    performedById: requester.id
+                },
+            });
         });
     } catch (error) {
         console.error("Failed to create ticket: ", error);

@@ -3,13 +3,15 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { UserRole } from "@/generated/prisma/enums";
+import { TicketActivityType, UserRole } from "@/generated/prisma/enums";
 import { requireRole } from "@/lib/auth-guards";
 import { prisma } from "@/lib/prisma";
 import {
   updateTicketSchema,
   type UpdateTicketState,
 } from "@/lib/validations/ticket-management";
+import { formatEnumLabel } from "@/lib/formatters";
+import { stat } from "fs";
 
 export async function updateTicket(
     ticketId: string,
@@ -19,7 +21,7 @@ export async function updateTicket(
     /*
     * Only agents and administrators may update tickets.
     */
-    await requireRole([
+    const currentUser = await requireRole([
         UserRole.AGENT,
         UserRole.ADMIN,
     ]);
@@ -56,8 +58,17 @@ export async function updateTicket(
         },
         select: {
             id: true,
+            status: true,
+            priority: true,
+            assignedAgentId: true,
             resolvedAt: true,
-            closedAt: true,           
+            closedAt: true,        
+            
+            assignedAgent: {
+                select: {
+                    name: true,
+                },
+            },
         },
     });
 
@@ -73,8 +84,13 @@ export async function updateTicket(
     * Never trust an agent ID submitted by the browser.
     */
 
+    let selectedAgent: {
+        id: string;
+        name: string;
+    } | null = null;
+
     if (assignedAgentId) {
-        const assignedAgent = await prisma.user.findFirst({
+        selectedAgent = await prisma.user.findFirst({
             where: {
                 id: assignedAgentId,
                 role: UserRole.AGENT,
@@ -82,10 +98,11 @@ export async function updateTicket(
             },
             select: {
                 id: true,
+                name: true,
             },
         });
 
-        if (!assignedAgent) {
+        if (!selectedAgent) {
             return {
                 errors: {
                     assignedAgentId: ["The selected agent is unavailable."],
@@ -125,18 +142,77 @@ export async function updateTicket(
         closedAt = ticket.closedAt ?? now;
     }
 
+    const activities: {
+        type: TicketActivityType;
+        description: string;
+        oldValue: string | null;
+        newValue: string | null;
+        ticketId: string;
+        performedById: string;
+    }[] = [];
+
+    if (ticket.status !== status) {
+        activities.push({
+            type: TicketActivityType.STATUS_CHANGED,
+            description: `${currentUser.name} changed the status from ${formatEnumLabel(ticket.status,)} to ${formatEnumLabel(status)}.`,
+            oldValue: ticket.status,
+            newValue: status,
+            ticketId: ticket.id,
+            performedById: currentUser.id,
+        });
+    }
+
+    if (ticket.priority !== priority) {
+        activities.push({
+            type: TicketActivityType.PRIORITY_CHANGED,
+            description: `${currentUser.name} changed the priority from ${formatEnumLabel(ticket.priority,)} to ${formatEnumLabel(priority)}.`,
+            oldValue: ticket.priority,
+            newValue: priority,
+            ticketId: ticket.id,
+            performedById: currentUser.id,
+        });
+    }
+
+    if (ticket.assignedAgentId !== assignedAgentId) {
+        const previousAgentName = ticket.assignedAgent?.name ?? "Unassigned";
+
+        const newAgentName = selectedAgent?.name ?? "Unassigned";
+
+        activities.push({
+            type: TicketActivityType.ASSIGNMENT_CHANGED,
+            description: `${currentUser.name} changed the assigned agent from ${previousAgentName} to ${newAgentName}.`,
+            oldValue: ticket.assignedAgentId,
+            newValue: assignedAgentId,
+            ticketId: ticket.id,
+            performedById: currentUser.id,
+        });
+    }
+
+    if (activities.length === 0) {
+        return {
+            message: "No ticket changes were detected.",
+            success: true,
+        };
+    }
+
     try {
-        await prisma.ticket.update({
-            where: {
-                id: ticket.id,
-            },
-            data: {
-                status,
-                priority,
-                assignedAgentId,
-                resolvedAt,
-                closedAt,
-            },
+        await prisma.$transaction(async (transaction) => {
+            await transaction.ticket.update({
+                where: {
+                    id: ticket.id,
+                },
+                data: {
+                    status,
+                    priority,
+                    assignedAgentId,
+                    resolvedAt,
+                    closedAt,
+                },
+            });
+
+            await transaction.ticketActivity.createMany({
+                data: activities,
+            });
         });
     } catch(error) {
         console.error("Failed to update ticket: ", error);

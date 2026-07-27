@@ -29,6 +29,13 @@ enum TicketPriority {
   URGENT
 }
 
+enum TicketActivityType {
+  CREATED
+  STATUS_CHANGED
+  PRIORITY_CHANGED
+  ASSIGNMENT_CHANGED
+}
+
 model User {
   id           String   @id @default(cuid())
   name         String
@@ -39,9 +46,10 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  requestedTickets Ticket[]        @relation("RequestedTickets")
-  assignedTickets  Ticket[]        @relation("AssignedTickets")
+  requestedTickets Ticket[]         @relation("RequestedTickets")
+  assignedTickets  Ticket[]         @relation("AssignedTickets")
   comments         TicketComment[]
+  activities       TicketActivity[]
 }
 
 model Category {
@@ -70,10 +78,11 @@ model Ticket {
   resolvedAt      DateTime?
   closedAt        DateTime?
 
-  requester     User            @relation("RequestedTickets", fields: [requesterId], references: [id], onDelete: Restrict)
-  assignedAgent User?           @relation("AssignedTickets", fields: [assignedAgentId], references: [id], onDelete: SetNull)
-  category      Category        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  requester     User             @relation("RequestedTickets", fields: [requesterId], references: [id], onDelete: Restrict)
+  assignedAgent User?            @relation("AssignedTickets", fields: [assignedAgentId], references: [id], onDelete: SetNull)
+  category      Category         @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   comments      TicketComment[]
+  activities    TicketActivity[]
 
   @@index([status])
   @@index([priority])
@@ -97,4 +106,22 @@ model TicketComment {
 
   @@index([ticketId, createdAt])
   @@index([authorId])
+}
+
+model TicketActivity {
+  id            String             @id @default(cuid())
+  type          TicketActivityType
+  description   String
+  oldValue      String?
+  newValue      String?
+  isInternal    Boolean            @default(false)
+  ticketId      String
+  performedById String
+  createdAt     DateTime           @default(now())
+
+  ticket      Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  performedBy User   @relation(fields: [performedById], references: [id], onDelete: Restrict)
+
+  @@index([ticketId, createdAt])
+  @@index([performedById])
 }

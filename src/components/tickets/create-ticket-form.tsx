@@ -46,7 +46,7 @@ export function CreateTicketForm({
                     maxLength={120}
                     placeholder="Briefly describe ypur concern"
                     aria-describedby="subject-error"
-                    className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-600"
+                    className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-600"
                 />
 
                 <div
@@ -79,7 +79,7 @@ export function CreateTicketForm({
                     required
                     defaultValue=""
                     aria-describedby="category-error"
-                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-600" 
+                    className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-600" 
                 >
                     <option value="" disabled>
                         Select a category
@@ -125,7 +125,7 @@ export function CreateTicketForm({
                     required
                     defaultValue="MEDIUM"
                     aria-describedby="priority-error"
-                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-600"
+                    className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-600"
                 >
                     <option value="LOW">Low</option>
                     <option value="MEDIUM">Medium</option>
@@ -166,7 +166,7 @@ export function CreateTicketForm({
                     rows={7}
                     placeholder="Provide the relevant details, steps, and error messages."
                     aria-describedby="description-error"
-                    className="mt-2 w-full resize-y rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-600"
+                    className="mt-2 w-full text-black resize-y rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-600"
                 />
 
                 <div

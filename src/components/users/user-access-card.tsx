@@ -107,7 +107,7 @@ export function UserAccessCard({
                         id={`user-role-${user.id}`}
                         name="role"
                         defaultValue={user.role}
-                        className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     >
                         {USER_ROLE_VALUES.map((role) => (
                             <option key={role} value={role}>
@@ -138,7 +138,7 @@ export function UserAccessCard({
                         id={`user-status-${user.id}`}
                         name="isActive"
                         defaultValue={String(user.isActive)}
-                        className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     >
                         <option value="true">Active</option>
                         <option value="false">Inactive</option>

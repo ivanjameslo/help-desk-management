@@ -57,7 +57,7 @@ export function CreateUserForm() {
                         maxLength={100}
                         autoComplete="name"
                         placeholder="Enter the user's full name"
-                        className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     />
 
                     {state.errors?.name?.map((error) => (
@@ -86,7 +86,7 @@ export function CreateUserForm() {
                         maxLength={255}
                         autoComplete="email"
                         placeholder="user@example.com"
-                        className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     />
 
                     {state.errors?.email?.map((error) => (
@@ -116,7 +116,7 @@ export function CreateUserForm() {
                         maxLength={128}
                         autoComplete="new-password"
                         placeholder="At least 8 characters"
-                        className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     />
 
                     {state.errors?.password?.map((error) => (
@@ -145,7 +145,7 @@ export function CreateUserForm() {
                         id="new-user-role"
                         name="role"
                         defaultValue="REQUESTER"
-                        className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     >
                         {USER_ROLE_VALUES.map((role) => (
                             <option key={role} value={role}>

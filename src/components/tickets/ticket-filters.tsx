@@ -59,7 +59,7 @@ export function TicketFilters({
                         defaultValue={currentFilters.query}
                         maxLength={100}
                         placeholder="Ticket number or subject"
-                        className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"  
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"  
                     />
                 </div>
 
@@ -75,7 +75,7 @@ export function TicketFilters({
                         id="ticket-status"
                         name="status"
                         defaultValue={currentFilters.status}
-                        className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     >
                         <option value="">All statuses</option>
 
@@ -99,7 +99,7 @@ export function TicketFilters({
                         id="ticket-priority"
                         name="priority"
                         defaultValue={currentFilters.priority}
-                        className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     >
                         <option value="">All priorities</option>
 
@@ -123,7 +123,7 @@ export function TicketFilters({
                         id="ticket-category"
                         name="category"
                         defaultValue={currentFilters.categoryId}
-                        className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     >
                         <option value="">All categories</option>
 
@@ -151,7 +151,7 @@ export function TicketFilters({
                         id="ticket-sort"
                         name="sort"
                         defaultValue={currentFilters.sort}
-                        className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     >
                         <option value="newest">Newest First</option>
                         <option value="oldest">Oldest First</option>
@@ -173,7 +173,7 @@ export function TicketFilters({
                         id="assigned-agent"
                         name="assignedAgent"
                         defaultValue={currentFilters.assignedAgentId}
-                        className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                     >
                         <option value="">All assignments</option>
                         <option value="unassigned">Unassigned</option>

@@ -28,7 +28,7 @@ export function LoginForm() {
                     type="email"
                     required
                     autoComplete="email"
-                    placeholder="requester@helpdesk.local"
+                    placeholder="you@example.com"
                     className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-slate-700"
                 />
             </div>

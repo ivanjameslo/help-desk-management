@@ -28,16 +28,6 @@ export default async function LoginPage() {
         </div>
 
         <LoginForm />
-
-        {/* Remove Later */}
-        <div className="mt-6 rounded-lg bg-gray-50 p-4 text-xs text-gray-600">
-          <p>Development account:</p>
-          <p className="mt-1">
-            requester@helpdesk.local
-          </p>
-          <p>Password123!</p>
-          <p>!!!Remove Later!!!</p>
-        </div>
       </div>
     </main>
   );

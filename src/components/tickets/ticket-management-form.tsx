@@ -66,7 +66,7 @@ export function TicketManagementForm({
                         id="assignedAgentId"
                         name="assignedAgentId"
                         defaultValue={ticket.assignedAgentId ?? ""}
-                        className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-slate-700"
                     >
                         <option value="">Unassigned</option>
 
@@ -101,7 +101,7 @@ export function TicketManagementForm({
                         id="status"
                         name="status"
                         defaultValue={ticket.status}
-                        className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-slate-700"
                     >
                         {TICKET_STATUS_VALUES.map((status) => (
                             <option key={status} value={status}>
@@ -132,7 +132,7 @@ export function TicketManagementForm({
                         id="priority"
                         name="priority"
                         defaultValue={ticket.priority}
-                        className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-slate-700"
+                        className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-slate-700"
                     >
                         {TICKET_PRIORITY_VALUES.map((priority) => (
                             <option key={priority} value={priority}>

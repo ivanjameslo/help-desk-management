@@ -11,7 +11,6 @@ import {
   type UpdateTicketState,
 } from "@/lib/validations/ticket-management";
 import { formatEnumLabel } from "@/lib/formatters";
-import { stat } from "fs";
 
 export async function updateTicket(
     ticketId: string,

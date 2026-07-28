@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import {
-    TicketPriority,
   TicketStatus,
   UserRole,
 } from "@/generated/prisma/enums";

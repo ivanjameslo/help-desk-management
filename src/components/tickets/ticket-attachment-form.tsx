@@ -4,7 +4,6 @@ import { useActionState, useEffect, useRef } from "react";
 
 import { uploadTicketAttachment } from "@/app/(app)/tickets/[ticketId]/attachment-actions";
 import type { TicketAttachmentState } from "@/lib/validations/ticket-attachment";
-import { upload } from "@vercel/blob/client";
 
 type TicketAttachmentFormProps = {
     ticketId: string;

@@ -3,7 +3,6 @@ import { CreateCategoryForm } from "@/components/categories/create-category-form
 import { UserRole } from "@/generated/prisma/enums";
 import { requireRole } from "@/lib/auth-guards";
 import { prisma } from "@/lib/prisma";
-import { categorySchema } from "@/lib/validations/category";
 
 export default async function CategoriesPage() {
   await requireRole([UserRole.ADMIN]);

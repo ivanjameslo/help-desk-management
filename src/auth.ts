@@ -27,7 +27,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 email: {
                     label: "Email",
                     type: "email",
-                    // placeholder: "requester@helpdesk.local"
                 },
 
                 password: {

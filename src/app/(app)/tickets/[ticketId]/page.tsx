@@ -3,10 +3,11 @@ import { notFound } from "next/navigation";
 
 import { TicketManagementForm } from "@/components/tickets/ticket-management-form";
 import { UserRole, TicketStatus } from "@/generated/prisma/enums";
-import { formatDateTime, formatEnumLabel } from "@/lib/formatters";
+import { formatDateTime, formatEnumLabel, formatFileSize } from "@/lib/formatters";
 import { requireUser } from "@/lib/auth-guards";
 import { prisma } from "@/lib/prisma";
 import { TicketCommentForm } from "@/components/tickets/ticket-comment-form";
+import { TicketAttachmentForm } from "@/components/tickets/ticket-attachment-form";
 
 type TicketDetailsPageProps = {
     params: Promise<{
@@ -92,6 +93,27 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
                     createdAt: true,
 
                     performedBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                            role: true,
+                        },
+                    },
+                },
+            },
+            attachments: {
+                orderBy: {
+                    createdAt: "desc",
+                },
+
+                select: {
+                    id: true,
+                    fileName: true,
+                    contentType: true,
+                    size: true,
+                    createdAt: true,
+
+                    uploadedBy: {
                         select: {
                             id: true,
                             name: true,
@@ -238,6 +260,63 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
                             </div>
                         )}
                     </section>
+
+                    <section className="rounded-xl border bg-white p-6 shadow-sm">
+                        <div className="flex items-center justify-between gap-4">
+                            <h2 className="text-lg font-semibold text-gray-900">
+                                Attachments
+                            </h2>
+
+                            <p className="text-sm text-gray-500">
+                                {ticket.attachments.length}{" "}
+                                {ticket.attachments.length === 1
+                                    ? "file"
+                                    : "files"}
+                            </p>
+                        </div>
+
+                        {ticket.attachments.length === 0 ? (
+                            <p className="mt-4 text-sm text-gray-500">
+                                No files have been attached.
+                            </p>
+                        ) : (
+                            <div className="mt-5 divide-y rounded-lg border">
+                            {ticket.attachments.map((attachment) => (
+                                <div
+                                    key={attachment.id}
+                                    className="flex flex-wrap items-center justify-between gap-4 p-4"
+                                >
+                                    <div className="min-w-0">
+                                        <p className="truncate text-sm font-medium text-gray-900">
+                                            {attachment.fileName}
+                                        </p>
+
+                                        <p className="mt-1 text-xs text-gray-500">
+                                            {formatFileSize(attachment.size)}
+                                            {" · "}
+                                            Uploaded by {attachment.uploadedBy.name}
+                                            {" · "}
+                                            {formatDateTime(attachment.createdAt)}
+                                        </p>
+                                    </div>
+
+                                    <a
+                                        href={`/api/attachments/${attachment.id}`}
+                                        className="rounded-lg border px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+                                    >
+                                        Download
+                                    </a>
+                                </div>
+                            ))}
+                            </div>
+                        )}
+                    </section>
+
+                    {ticket.status !== TicketStatus.CLOSED && (
+                        <TicketAttachmentForm
+                            ticketId={ticket.id}
+                        />
+                    )}
 
                    {/* Reply form or closed-ticket notice */}
                    {ticket.status === TicketStatus.CLOSED ? (

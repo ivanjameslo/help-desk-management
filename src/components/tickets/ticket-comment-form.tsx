@@ -61,7 +61,7 @@ export function TicketCommentForm({
                         : "Write your reply..."
                     }
                     aria-describedby="comment-error"
-                    className="mt-2 w-full resize-y rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                    className="mt-2 w-full text-black resize-y rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
                 />
 
                 <div

@@ -46,10 +46,11 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  requestedTickets Ticket[]         @relation("RequestedTickets")
-  assignedTickets  Ticket[]         @relation("AssignedTickets")
+  requestedTickets Ticket[]           @relation("RequestedTickets")
+  assignedTickets  Ticket[]           @relation("AssignedTickets")
   comments         TicketComment[]
   activities       TicketActivity[]
+  attachments      TicketAttachment[]
 }
 
 model Category {
@@ -78,11 +79,12 @@ model Ticket {
   resolvedAt      DateTime?
   closedAt        DateTime?
 
-  requester     User             @relation("RequestedTickets", fields: [requesterId], references: [id], onDelete: Restrict)
-  assignedAgent User?            @relation("AssignedTickets", fields: [assignedAgentId], references: [id], onDelete: SetNull)
-  category      Category         @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  requester     User               @relation("RequestedTickets", fields: [requesterId], references: [id], onDelete: Restrict)
+  assignedAgent User?              @relation("AssignedTickets", fields: [assignedAgentId], references: [id], onDelete: SetNull)
+  category      Category           @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   comments      TicketComment[]
   activities    TicketActivity[]
+  attachments   TicketAttachment[]
 
   @@index([status])
   @@index([priority])
@@ -124,4 +126,22 @@ model TicketActivity {
 
   @@index([ticketId, createdAt])
   @@index([performedById])
+}
+
+model TicketAttachment {
+  id           String   @id @default(cuid())
+  fileName     String
+  pathname     String   @unique
+  url          String   @unique
+  contentType  String
+  size         Int
+  ticketId     String
+  uploadedById String
+  createdAt    DateTime @default(now())
+
+  ticket     Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  uploadedBy User   @relation(fields: [uploadedById], references: [id], onDelete: Restrict)
+
+  @@index([ticketId, createdAt])
+  @@index([uploadedById])
 }

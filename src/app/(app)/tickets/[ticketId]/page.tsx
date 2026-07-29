@@ -300,9 +300,20 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
                     </section>
 
                     {ticket.status !== TicketStatus.CLOSED && (
-                        <TicketAttachmentForm
-                            ticketId={ticket.id}
-                        />
+                        user.isDemo ? (
+                            <section className="rounded-xl border border-violet-200 bg-violet-50 p-6">
+                                <h2 className="text-lg font-semibold text-violet-900">
+                                    Attachment Uploads Disabled
+                                </h2>
+
+                                <p className="mt-2 text-sm leading-6 text-violet-700">
+                                    Public demo accounts cannot upload files. You can still view and
+                                    download existing attachments that you are authorized to access.
+                                </p>
+                            </section>
+                        ) : (
+                            <TicketAttachmentForm ticketId={ticket.id} />
+                        )
                     )}
 
                    {/* Reply form or closed-ticket notice */}

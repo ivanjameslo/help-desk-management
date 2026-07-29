@@ -71,34 +71,9 @@ export async function GET(
     });
   }
 
-  const oidcToken =
-    process.env.VERCEL_OIDC_TOKEN;
-
-  const storeId =
-    process.env.BLOB_STORE_ID;
-
-  if (!oidcToken || !storeId) {
-    console.error(
-      "Missing Blob credentials:",
-      {
-        hasOidcToken: Boolean(oidcToken),
-        hasStoreId: Boolean(storeId),
-      },
-    );
-
-    return new NextResponse(
-      "File storage is not configured.",
-      {
-        status: 500,
-      },
-    );
-  }
-
   try {
     const result = await get(attachment.pathname, {
       access: "private",
-      oidcToken,
-      storeId,
       useCache: false,
     });
 

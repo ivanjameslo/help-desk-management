@@ -4,6 +4,7 @@ import { UserRole } from "@/generated/prisma/enums";
 import { requireRole } from "@/lib/auth-guards";
 import { formatDate } from "@/lib/formatters";
 import { prisma } from "@/lib/prisma";
+import { ResetDemoDataForm } from "@/components/admin/reset-demo-data-form";
 
 export default async function UserPage() {
   const currentAdmin = await requireRole([UserRole.ADMIN]);
@@ -49,8 +50,9 @@ export default async function UserPage() {
       </div>
 
       <div className="mt-8 grid items-start gap-8 lg:grid-cols-[360px_minmax(0,1fr)]">
-        <div className="lg:sticky lg:top-6">
+        <div className="space-y-6 lg:sticky lg:top-6">
           <CreateUserForm />
+          <ResetDemoDataForm />
         </div>
 
         <section>

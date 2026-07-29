@@ -34,6 +34,7 @@ export async function createUser(
         email: formData.get("email"),
         password: formData.get("password"),
         role: formData.get("role"),
+        isDemo: formData.get("isDemo"),
     });
 
     if (!validatedFields.success) {
@@ -46,7 +47,7 @@ export async function createUser(
         };
     }
 
-    const { name, email, password, role } = validatedFields.data;
+    const { name, email, password, role, isDemo } = validatedFields.data;
 
     const normalizedEmail = email.toLocaleLowerCase();
 
@@ -81,6 +82,7 @@ export async function createUser(
                 email: normalizedEmail,
                 passwordHash,
                 role,
+                isDemo,
             },
         });
     } catch (error) {

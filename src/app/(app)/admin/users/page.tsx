@@ -24,6 +24,7 @@ export default async function UserPage() {
       email: true,
       role: true,
       isActive: true,
+      isDemo: true,
       createdAt: true,
 
       _count: {
@@ -81,6 +82,7 @@ export default async function UserPage() {
                     email: user.email,
                     role: user.role,
                     isActive: user.isActive,
+                    isDemo: user.isDemo,
                     createdAtLabel: formatDate(user.createdAt),
                     requestedTicketCount: user._count.requestedTickets,
                     assignedTicketCount: user._count.assignedTickets

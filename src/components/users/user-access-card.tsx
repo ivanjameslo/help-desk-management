@@ -17,6 +17,7 @@ type UserAccessCardProps = {
         email: string;
         role: UserRoleValue;
         isActive: boolean;
+        isDemo: boolean;
         createdAtLabel: string;
         requestedTicketCount: number;
         assignedTicketCount: number;
@@ -54,6 +55,12 @@ export function UserAccessCard({
                         {isCurrentUser && (
                             <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700">
                                 You
+                            </span>
+                        )}
+
+                        {user.isDemo && (
+                            <span className="rounded-full bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-700">
+                                Demo
                             </span>
                         )}
 

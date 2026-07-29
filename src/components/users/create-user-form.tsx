@@ -164,6 +164,41 @@ export function CreateUserForm() {
                     ))}
                 </div>
 
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                    <div className="flex items-start gap-3">
+                        <input
+                            id="new-user-is-demo"
+                            name="isDemo"
+                            type="checkbox"
+                            value="true"
+                            className="mt-1 h-4 w-4 rounded border-gray-300"
+                        />
+
+                        <div>
+                            <label
+                                htmlFor="new-user-is-demo"
+                                className="text-sm font-medium text-gray-700"
+                            >
+                                Demo Account
+                            </label>
+
+                            <p className="mt-1 text-xs leading-5 text-gray-500">
+                                Restricts this account to demo data and prevents it from uploading
+                                attachments or modifying protected records.
+                            </p>
+                        </div>
+                    </div>
+
+                    {state.errors?.isDemo?.map((error) => (
+                        <p
+                            key={error}
+                            className="mt-2 text-sm text-red-600"
+                        >
+                            {error}
+                        </p>
+                    ))}
+                </div>
+
                 {state.message && (
                     <p
                         aria-live="polite"

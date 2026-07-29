@@ -25,6 +25,11 @@ export const createUserSchema = z.object({
         .max(128, "Password cannot exceed 128 characters."),
 
     role: z.enum(USER_ROLE_VALUES),
+
+    isDemo: z.preprocess(
+        (value) => value === "true",
+        z.boolean(),
+    ),
 });
 
 export const updateUserAccessSchema = z.object({
@@ -43,6 +48,7 @@ export type CreateUserActionState = {
         email?: string[];
         password?: string[];
         role?: string[];
+        isDemo?: string[];
     };
     message?: string;
     success?: boolean;

@@ -55,6 +55,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         passwordHash: true,
                         role: true,
                         isActive: true,
+                        isDemo: true,
                     },
                 });
 
@@ -76,6 +77,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     name: user.name,
                     email: user.email,
                     role: user.role,
+                    isDemo: user.isDemo,
                 };
             },
         }),
@@ -85,6 +87,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         jwt({ token, user }) {
             if (user) {
                 token.role = user.role;
+                token.isDemo = user.isDemo;
             }
 
             return token;
@@ -98,6 +101,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (token.role) {
                 session.user.role = token.role;
             }
+
+            session.user.isDemo = token.isDemo ?? false;
 
             return session;
         },

@@ -11,6 +11,7 @@ import {
 import { requireUser } from "@/lib/auth-guards";
 import { formatDateTime, formatEnumLabel } from "@/lib/formatters";
 import { prisma } from "@/lib/prisma";
+import { getTicketAccessWhere, getTicketActivityAccessWhere } from "@/lib/ticket-access";
 
 const ACTIVE_STATUSES: TicketStatus[] = [
   TicketStatus.OPEN,
@@ -47,11 +48,7 @@ export default async function DashboardPage() {
    * Agents and administrators receive system-wide data.
    */
   const ticketAccessWhere: Prisma.TicketWhereInput =
-    isRequester
-      ? {
-          requesterId: user.id,
-        }
-      : {};
+    getTicketAccessWhere(user);
 
   const [
     totalTickets,
@@ -142,15 +139,7 @@ export default async function DashboardPage() {
      * ticket activity.
      */
     prisma.ticketActivity.findMany({
-      where: isRequester
-        ? {
-            isInternal: false,
-
-            ticket: {
-              requesterId: user.id,
-            },
-          }
-        : {},
+      where: getTicketActivityAccessWhere(user),
 
       orderBy: {
         createdAt: "desc",

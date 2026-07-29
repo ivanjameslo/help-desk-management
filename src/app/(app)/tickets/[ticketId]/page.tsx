@@ -8,6 +8,7 @@ import { requireUser } from "@/lib/auth-guards";
 import { prisma } from "@/lib/prisma";
 import { TicketCommentForm } from "@/components/tickets/ticket-comment-form";
 import { TicketAttachmentForm } from "@/components/tickets/ticket-attachment-form";
+import { getTicketAccessWhere } from "@/lib/ticket-access";
 
 type TicketDetailsPageProps = {
     params: Promise<{
@@ -19,9 +20,10 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
     const user = await requireUser();
     const { ticketId } = await params;
 
-    const ticket = await prisma.ticket.findUnique({
+    const ticket = await prisma.ticket.findFirst({
         where: {
             id: ticketId,
+            ...getTicketAccessWhere(user),
         },
         include: {
             requester: {
@@ -126,21 +128,6 @@ export default async function TicketDetailsPage({ params }: TicketDetailsPagePro
     });
 
     if (!ticket) {
-        notFound();
-    }
-
-    // This condition checks whether the logged-in requester owns the ticket
-    const isRequesterOwner = 
-        user.role === UserRole.REQUESTER && 
-        ticket.requesterId === user.id;
-
-    // This condition checks whether the user is allowed to view every ticket    
-    const canViewAllTickets = 
-        user.role === UserRole.AGENT ||
-        user.role === UserRole.ADMIN;
-
-    // Show the ticket only when the user owns it, or is an Agent/Admin.
-    if (!isRequesterOwner && !canViewAllTickets) {
         notFound();
     }
 

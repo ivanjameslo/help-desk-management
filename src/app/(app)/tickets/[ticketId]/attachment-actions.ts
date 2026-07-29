@@ -3,11 +3,9 @@
 import { del, put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 
-import {
-  TicketStatus,
-  UserRole,
-} from "@/generated/prisma/enums";
+import { TicketStatus } from "@/generated/prisma/enums";
 import { requireUser } from "@/lib/auth-guards";
+import { getTicketAccessWhere } from "@/lib/ticket-access";
 import { prisma } from "@/lib/prisma";
 import {
   isAllowedAttachmentType,
@@ -32,37 +30,28 @@ export async function uploadTicketAttachment(
 ): Promise<TicketAttachmentState> {
   const user = await requireUser();
 
-  const ticket = await prisma.ticket.findUnique({
+  if (user.isDemo) {
+    return {
+      message: "Attachment uploads are disabled for public demo accounts.",
+      success: false,
+    }
+  }
+
+  const ticket = await prisma.ticket.findFirst({
     where: {
+      ...getTicketAccessWhere(user),
       id: ticketId,
     },
 
     select: {
       id: true,
-      requesterId: true,
       status: true,
     },
   });
 
   if (!ticket) {
     return {
-      message: "The ticket could not be found.",
-      success: false,
-    };
-  }
-
-  const isRequesterOwner =
-    user.role === UserRole.REQUESTER &&
-    ticket.requesterId === user.id;
-
-  const canAccessAllTickets =
-    user.role === UserRole.AGENT ||
-    user.role === UserRole.ADMIN;
-
-  if (!isRequesterOwner && !canAccessAllTickets) {
-    return {
-      message:
-        "This ticket is unavailable or you do not have permission to access it.",
+      message: "This ticket is unavailable or you do not have permission to access it.",
       success: false,
     };
   }

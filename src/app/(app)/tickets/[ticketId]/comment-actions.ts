@@ -3,11 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import {
-  TicketStatus,
-  UserRole,
-} from "@/generated/prisma/enums";
+import { TicketStatus, UserRole } from "@/generated/prisma/enums";
 import { requireUser } from "@/lib/auth-guards";
+import { getTicketAccessWhere } from "@/lib/ticket-access";
 import { prisma } from "@/lib/prisma";
 import {
   addTicketCommentSchema,
@@ -37,13 +35,13 @@ export async function addTicketComment(
         };
     }
 
-    const ticket = await prisma.ticket.findUnique({
+    const ticket = await prisma.ticket.findFirst({
         where: {
+            ...getTicketAccessWhere(user),
             id: ticketId,
         },
         select: {
             id: true,
-            requesterId: true,
             status: true,
         },
     });
@@ -51,21 +49,6 @@ export async function addTicketComment(
     if (!ticket) {
         return {
             message: "The ticket could not be found.",
-            success: false,
-        };
-    }
-
-    const isRequesterOwner = 
-        user.role === UserRole.REQUESTER && 
-        ticket.requesterId === user.id;
-
-    const canViewAllTickets = 
-        user.role === UserRole.AGENT ||
-        user.role === UserRole.ADMIN;
-
-    if (!isRequesterOwner && !!canViewAllTickets) {
-        return {
-            message: "This ticket is unavailable or you do not have permission to access it.",
             success: false,
         };
     }

@@ -2,7 +2,7 @@ import { get } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
-import { UserRole } from "@/generated/prisma/enums";
+import { getTicketAccessWhere } from "@/lib/ticket-access";
 import { prisma } from "@/lib/prisma";
 
 type AttachmentRouteProps = {
@@ -31,6 +31,7 @@ export async function GET(
       id: true,
       role: true,
       isActive: true,
+      isDemo: true,
     },
   });
 
@@ -43,21 +44,19 @@ export async function GET(
   const { attachmentId } = await params;
 
   const attachment =
-    await prisma.ticketAttachment.findUnique({
+    await prisma.ticketAttachment.findFirst({
       where: {
         id: attachmentId,
+
+        ticket: {
+          is: getTicketAccessWhere(user),
+        },
       },
       select: {
         id: true,
         fileName: true,
         pathname: true,
         contentType: true,
-
-        ticket: {
-          select: {
-            requesterId: true,
-          },
-        },
       },
     });
 
@@ -65,25 +64,6 @@ export async function GET(
     console.error(
       "Attachment record not found:",
       attachmentId,
-    );
-
-    return new NextResponse("Not found", {
-      status: 404,
-    });
-  }
-
-  const isRequesterOwner =
-    user.role === UserRole.REQUESTER &&
-    attachment.ticket.requesterId === user.id;
-
-  const canAccessAllTickets =
-    user.role === UserRole.AGENT ||
-    user.role === UserRole.ADMIN;
-
-  if (!isRequesterOwner && !canAccessAllTickets) {
-    console.error(
-      "Attachment access denied:",
-      attachment.id,
     );
 
     return new NextResponse("Not found", {

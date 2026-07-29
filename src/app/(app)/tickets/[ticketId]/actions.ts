@@ -11,6 +11,7 @@ import {
   type UpdateTicketState,
 } from "@/lib/validations/ticket-management";
 import { formatEnumLabel } from "@/lib/formatters";
+import { getTicketAccessWhere } from "@/lib/ticket-access";
 
 export async function updateTicket(
     ticketId: string,
@@ -49,11 +50,12 @@ export async function updateTicket(
         assignedAgentId: submittedAgentId,
     } = validatedFields.data;
 
-    const assignedAgentId = submittedAgentId. length > 0 ? submittedAgentId : null;
+    const assignedAgentId = submittedAgentId.length > 0 ? submittedAgentId : null;
 
-    const ticket = await prisma.ticket.findUnique({
+    const ticket = await prisma.ticket.findFirst({
         where: {
             id: ticketId,
+            ...getTicketAccessWhere(currentUser),
         },
         select: {
             id: true,
@@ -94,6 +96,12 @@ export async function updateTicket(
                 id: assignedAgentId,
                 role: UserRole.AGENT,
                 isActive: true,
+
+                ...(currentUser.isDemo
+                    ? {
+                        isDemo: true,
+                      }
+                    : {}),
             },
             select: {
                 id: true,

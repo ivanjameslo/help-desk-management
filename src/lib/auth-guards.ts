@@ -21,6 +21,7 @@ export async function requireUser() {
             email: true,
             role: true,
             isActive: true,
+            isDemo: true,
         },
     });
 

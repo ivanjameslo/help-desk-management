@@ -15,6 +15,7 @@ import {
   type TicketPriorityValue,
   type TicketStatusValue,
 } from "@/lib/validations/ticket-management";
+import { getTicketAccessWhere } from "@/lib/ticket-access";
 
 const PAGE_SIZE = 10;
 
@@ -178,17 +179,15 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
     sort,
   };
 
+  const ticketAccessWhere = getTicketAccessWhere(user);
+
   const where: Prisma.TicketWhereInput = {
     /*
      * Requesters can only retrieve their own tickets.
      * Agents and administrators can retrieve all tickets.
      */
 
-    ...(user.role === UserRole.REQUESTER
-      ? {
-        requesterId: user.id,
-        }
-      : {}),
+    ...ticketAccessWhere,
 
     ...(query 
       ? {

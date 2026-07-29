@@ -85,6 +85,7 @@ export async function createTicket(
                     priority,
                     requesterId: requester.id,
                     categoryId: category.id,
+                    isDemo: requester.isDemo, // Tickets created by demo requesters are automatically marked as demo tickets.
                 },
             });
 

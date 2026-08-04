@@ -29,21 +29,21 @@ export function CreateUserForm() {
         <form
             ref={formRef}
             action={formAction}
-            className="rounded-xl border bg-white p-6 shadow-sm"
+            className="min-w-0 rounded-xl border bg-white p-4 shadow-sm sm:p-6"
         >
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-base font-semibold text-gray-900 sm:text-lg 2xl:text-xl">
                 Create User
             </h2>
 
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-xs leading-5 text-gray-500 sm:text-sm">
                 Add a requester, support agent, or administrator account.
             </p>
 
-            <div className="mt-6 space-y-5">
-                <div>
+            <div className="mt-5 grid gap-4 sm:mt-6 sm:gap-5 md:grid-cols-2 xl:grid-cols-1">
+                <div className="min-w-0">
                     <label
                         htmlFor="new-user-name"
-                        className="block text-sm font-medium text-gray-700"
+                        className="block text-xs font-medium text-gray-700 sm:text-sm"
                     >
                         Full Name
                     </label>
@@ -57,23 +57,23 @@ export function CreateUserForm() {
                         maxLength={100}
                         autoComplete="name"
                         placeholder="Enter the user's full name"
-                        className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full min-w-0 rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black outline-none transition focus:border-slate-700 sm:text-sm"
                     />
 
                     {state.errors?.name?.map((error) => (
                         <p
                             key={error}
-                            className="mt-1 text-sm text-red-600"
+                            className="mt-1 text-xs text-red-600 sm:text-sm"
                         >
                             {error}
                         </p>
                     ))}
                 </div>
 
-                <div>
+                <div className="min-w-0">
                     <label
                         htmlFor="new-user-email"
-                        className="block text-sm font-medium text-gray-700"
+                        className="block text-xs font-medium text-gray-700 sm:text-sm"
                     >
                         Email address
                     </label>
@@ -86,13 +86,13 @@ export function CreateUserForm() {
                         maxLength={255}
                         autoComplete="email"
                         placeholder="user@example.com"
-                        className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full min-w-0 rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black outline-none transition focus:border-slate-700 sm:text-sm"
                     />
 
                     {state.errors?.email?.map((error) => (
                         <p
                             key={error}
-                            className="mt-1 text-sm text-red-600"
+                            className="mt-1 text-xs text-red-600 sm:text-sm"
                         >
                             {error}
                         </p>
@@ -102,7 +102,7 @@ export function CreateUserForm() {
                 <div>
                     <label
                         htmlFor="new-user-password"
-                        className="block text-sm font-medium text-gray-700"
+                        className="block text-xs font-medium text-gray-700 sm:text-sm"
                     >
                         Initial Password
                     </label>
@@ -116,73 +116,90 @@ export function CreateUserForm() {
                         maxLength={128}
                         autoComplete="new-password"
                         placeholder="At least 8 characters"
-                        className="mt-2 w-full text-black rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-slate-700"
+                        className="mt-2 w-full min-w-0 rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black outline-none transition focus:border-slate-700 sm:text-sm"
                     />
 
                     {state.errors?.password?.map((error) => (
                         <p
                             key={error}
-                            className="mt-1 text-sm text-red-600"
+                            className="mt-1 text-xs text-red-600 sm:text-sm"
                         >
                             {error}
                         </p>
                     ))}
 
-                    <p className="mt-1 text-xs leading-5 text-gray-500">
+                    <p className="mt-1 text-[11px] leading-5 text-gray-500 sm:text-xs">
                         Share the initial password securely with the user. A password-change workflow will be added later.
                     </p>
                 </div>
 
-                <div>
+                <div className="min-w-0">
                     <label
                         htmlFor="new-user-role"
-                        className="block text-sm font-medium text-gray-700"
+                        className="block text-xs font-medium text-gray-700 sm:text-sm"
                     >
                         Role
                     </label>
 
-                    <select
-                        id="new-user-role"
-                        name="role"
-                        defaultValue="REQUESTER"
-                        className="mt-2 w-full text-black rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-700"
-                    >
-                        {USER_ROLE_VALUES.map((role) => (
+                    <div className="relative mt-2">
+                        <select
+                            id="new-user-role"
+                            name="role"
+                            defaultValue="REQUESTER"
+                            className="w-full appearance-none rounded-lg border border-gray-300 bg-white py-2.5 pl-3 pr-12 text-xs text-black outline-none transition focus:border-slate-700 sm:text-sm"
+                        >
+                            {USER_ROLE_VALUES.map((role) => (
                             <option key={role} value={role}>
                                 {formatEnumLabel(role)}
                             </option>
-                        ))}
-                    </select>
+                            ))}
+                        </select>
+
+                        <svg
+                            aria-hidden="true"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-700"
+                        >
+                            <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m6 9 6 6 6-6"
+                            />
+                        </svg>
+                    </div>
 
                     {state.errors?.role?.map((error) => (
                         <p
                             key={error}
-                            className="mt-1 text-sm text-red-600"
+                            className="mt-1 text-xs text-red-600 sm:text-sm"
                         >
                             {error}
                         </p>
                     ))}
                 </div>
 
-                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 sm:p-4 md:col-span-2 xl:col-span-1">
                     <div className="flex items-start gap-3">
                         <input
                             id="new-user-is-demo"
                             name="isDemo"
                             type="checkbox"
                             value="true"
-                            className="mt-1 h-4 w-4 rounded border-gray-300"
+                            className="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 sm:mt-1"
                         />
 
                         <div>
                             <label
                                 htmlFor="new-user-is-demo"
-                                className="text-sm font-medium text-gray-700"
+                                className="text-xs font-medium text-gray-700 sm:text-sm"
                             >
                                 Demo Account
                             </label>
 
-                            <p className="mt-1 text-xs leading-5 text-gray-500">
+                            <p className="mt-1 wrap-break-word text-[11px] leading-5 text-gray-500 sm:text-xs">
                                 Restricts this account to demo data and prevents it from uploading
                                 attachments or modifying protected records.
                             </p>
@@ -192,7 +209,7 @@ export function CreateUserForm() {
                     {state.errors?.isDemo?.map((error) => (
                         <p
                             key={error}
-                            className="mt-2 text-sm text-red-600"
+                            className="mt-2 text-xs text-red-600 sm:text-sm"
                         >
                             {error}
                         </p>
@@ -202,7 +219,7 @@ export function CreateUserForm() {
                 {state.message && (
                     <p
                         aria-live="polite"
-                        className={`rounded-lg px-4 py-3 text-sm ${
+                        className={`rounded-lg px-3 py-2.5 text-xs sm:px-4 sm:py-3 sm:text-sm md:col-span-2 xl:col-span-1 ${
                         state.success
                             ? "bg-green-50 text-green-700"
                             : "bg-red-50 text-red-700"
@@ -215,7 +232,7 @@ export function CreateUserForm() {
                 <button
                     type="submit"
                     disabled={pending}
-                    className="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60 md:col-span-2 xl:col-span-1 2xl:py-3 2xl:text-base"
                 >
                     {pending ? "Creating account..." : "Create User"}
                 </button>

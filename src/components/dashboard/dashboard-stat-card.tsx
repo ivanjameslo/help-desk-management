@@ -10,16 +10,16 @@ export function DashboardStatCard({
     description,
 }: DashboardStatCardProps) {
     return (
-        <article className="rounded-xl border bg-white p-6 shadow-sm">
-            <p className="text-sm font-medium text-gray-500">
+        <article className="min-w-0 rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5 2xl:p-6">
+            <p className="text-xs font-medium text-gray-500 sm:text-sm 2xl:text-base">
                 {label}
             </p>
 
-            <p className="mt-3 text-3xl font-bold text-gray-900">
+            <p className="mt-3 text-2xl font-bold text-slate-950 sm:mt-4 sm:text-3xl 2xl:text-4xl">
                 {value}
             </p>
 
-            <p className="mt-2 text-sm leading-5 text-gray-500">
+            <p className="mt-3 text-xs leading-5 text-gray-500 sm:mt-4 sm:text-sm sm:leading-6 2xl:text-base">
                 {description}
             </p>
         </article>

@@ -310,13 +310,13 @@ export default async function DashboardPage() {
   return (
     <div className="mx-auto max-w-7xl">
       {/* Page heading */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl 2xl:text-4xl">
             Dashboard
           </h1>
 
-          <p className="mt-1 text-gray-600">
+          <p className="mt-1 text-sm text-gray-600 sm:text-base 2xl:text-lg">
             Welcome back, {user.name}.
           </p>
         </div>
@@ -327,7 +327,7 @@ export default async function DashboardPage() {
               ? "/tickets/new"
               : "/tickets"
           }
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
+          className="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-center text-sm font-medium text-white transition hover:bg-slate-700 sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
         >
           {isRequester
             ? "Create Ticket"
@@ -336,7 +336,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Statistic cards */}
-      <section className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:gap-4 xl:grid-cols-4 2xl:gap-6">
         {dashboardStatistics.map((statistic) => (
           <DashboardStatCard
             key={statistic.label}
@@ -348,7 +348,7 @@ export default async function DashboardPage() {
       </section>
 
       {/* Status and priority breakdowns */}
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <div className="mt-4 grid gap-4 sm:mt-6 sm:gap-6 lg:grid-cols-2">
         <DashboardBreakdown
           title="Tickets by Status"
           items={statusBreakdown}
@@ -363,11 +363,11 @@ export default async function DashboardPage() {
       </div>
 
       {/* Recent tickets and activities */}
-      <div className="mt-6 grid items-start gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.8fr)]">
+      <div className="mt-4 grid items-start gap-4 sm:mt-6 sm:gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.8fr)]">
         {/* Recent tickets */}
         <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-          <div className="flex items-center justify-between gap-4 border-b px-6 py-5">
-            <h2 className="text-lg font-semibold text-gray-900">
+          <div className="flex items-center justify-between gap-4 border-b px-4 py-4 sm:px-6 sm:py-5">
+            <h2 className="text-base font-semibold text-gray-900 sm:text-lg 2xl:text-xl">
               Recent Tickets
             </h2>
 
@@ -390,7 +390,7 @@ export default async function DashboardPage() {
               {recentTickets.map((ticket) => (
                 <article
                   key={ticket.id}
-                  className="flex flex-wrap items-start justify-between gap-4 px-6 py-5 transition hover:bg-gray-50"
+                  className="flex flex-wrap items-start justify-between gap-3 px-4 py-4 transition hover:bg-gray-50 sm:gap-4 sm:px-6 sm:py-5"
                 >
                   <div className="min-w-0">
                     <Link
@@ -440,16 +440,16 @@ export default async function DashboardPage() {
         </section>
 
         {/* Recent activity */}
-        <section className="rounded-xl border bg-white shadow-sm">
-          <div className="border-b px-6 py-5">
-            <h2 className="text-lg font-semibold text-gray-900">
+        <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
+          <div className="border-b px-4 py-4 sm:px-6 sm:py-5">
+            <h2 className="text-base font-semibold text-gray-900 sm:text-lg 2xl:text-xl">
               Recent Activity
             </h2>
           </div>
 
           {recentActivities.length === 0 ? (
-            <div className="p-6">
-              <p className="text-sm text-gray-500">
+            <div className="p-4 sm:p-6">
+              <p className="text-xs text-gray-500 sm:text-sm">
                 No ticket activity has been recorded yet.
               </p>
             </div>
@@ -458,28 +458,28 @@ export default async function DashboardPage() {
               {recentActivities.map((activity) => (
                 <li
                   key={activity.id}
-                  className="px-6 py-5"
+                  className="px-4 py-4 sm:px-6 sm:py-5"
                 >
                   <Link
                     href={`/tickets/${activity.ticket.id}`}
-                    className="text-sm font-medium text-gray-900 transition hover:text-slate-600"
+                    className="text-xs font-medium text-gray-900 transition hover:text-slate-600 sm:text-sm"
                   >
                     {activity.ticket.ticketNumber}
                   </Link>
 
-                  <p className="mt-2 text-sm leading-6 text-gray-600">
+                  <p className="mt-2 text-xs leading-5 text-gray-600 sm:text-sm sm:leading-6">
                     {activity.description}
                   </p>
 
                   <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <p className="text-xs text-gray-500">
+                    <p className="text-[11px] text-gray-500 sm:text-xs">
                       {formatDateTime(
                         activity.createdAt,
                       )}
                     </p>
 
                     {activity.isInternal && (
-                      <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                      <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-medium text-amber-800 sm:text-xs">
                         Internal
                       </span>
                     )}

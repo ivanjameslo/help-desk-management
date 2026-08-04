@@ -6,7 +6,7 @@ import { formatDate } from "@/lib/formatters";
 import { prisma } from "@/lib/prisma";
 import { ResetDemoDataForm } from "@/components/admin/reset-demo-data-form";
 
-export default async function UserPage() {
+export default async function UsersPage() {
   const currentAdmin = await requireRole([UserRole.ADMIN]);
 
   const users = await prisma.user.findMany({
@@ -38,44 +38,44 @@ export default async function UserPage() {
   });
 
   return (
-    <div className="mx-auto max-w-7xl">
+    <div className="mx-auto w-full max-w-7xl">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl 2xl:text-4xl">
           Manage Users
         </h1>
 
-        <p className="mt-1 text-gray-600">
+        <p className="mt-1 text-sm text-gray-600 sm:text-base 2xl:text-lg">
           Create accounts and manage system access.
         </p>
       </div>
 
-      <div className="mt-8 grid items-start gap-8 lg:grid-cols-[360px_minmax(0,1fr)]">
-        <div className="space-y-6 lg:sticky lg:top-6">
+      <div className="mt-5 grid items-start gap-5 sm:mt-6 sm:gap-6 lg:mt-8 lg:grid-cols-[320px_minmax(0,1fr)] lg:gap-6 xl:grid-cols-[340px_minmax(0,1fr)] xl:gap-8 2xl:grid-cols-[360px_minmax(0,1fr)]">
+        <div className="min-w-0 space-y-4 sm:space-y-6 lg:sticky lg:top-24">
           <CreateUserForm />
           <ResetDemoDataForm />
         </div>
 
-        <section>
-          <div className="mb-4 flex items-center justify-between gap-4">
-            <h2 className="text-lg font-semibold text-gray-900">
+        <section className="min-w-0">
+          <div className="mb-3 flex items-center justify-between gap-3 sm:mb-4 sm:gap-4">
+            <h2 className="text-base font-semibold text-gray-900 sm:text-lg 2xl:text-xl">
               Existing Users
             </h2>
 
-            <p className="text-sm text-gray-500">
+            <p className="shrink-0 text-xs text-gray-500 sm:text-sm">
               {users.length} total
             </p>
           </div>
 
           {users.length === 0 ? (
-            <div className="rounded-xl border bg-white p-8 text-center shadow-sm">
-              <p className="text-sm text-gray-500">
+            <div className="rounded-xl border bg-white p-6 text-center shadow-sm sm:p-8">
+              <p className="text-xs text-gray-500 sm:text-sm">
                 No user accounts are available.
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {users.map((user) => (
-                <UserAccessCard 
+                <UserAccessCard
                   key={user.id}
                   currentUserId={currentAdmin.id}
                   user={{
@@ -87,7 +87,7 @@ export default async function UserPage() {
                     isDemo: user.isDemo,
                     createdAtLabel: formatDate(user.createdAt),
                     requestedTicketCount: user._count.requestedTickets,
-                    assignedTicketCount: user._count.assignedTickets
+                    assignedTicketCount: user._count.assignedTickets,
                   }}
                 />
               ))}

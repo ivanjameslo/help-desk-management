@@ -11,18 +11,18 @@ export default async function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
-      <div className="w-full max-w-md rounded-2xl border bg-white p-8 shadow-sm">
-        <div className="mb-8">
-          <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+    <main className="flex min-h-dvh items-start justify-center bg-slate-100 px-4 py-6 sm:items-center sm:px-6 sm:py-8">
+      <div className="w-full min-w-0 max-w-md rounded-2xl border bg-white p-5 shadow-sm sm:p-8">
+        <div className="mb-6 sm:mb-8">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 sm:text-sm">
             Help Desk
           </p>
 
-          <h1 className="mt-2 text-3xl font-bold text-gray-900">
+          <h1 className="mt-2 wrap-break-word text-2xl font-bold text-gray-900 sm:text-3xl 2xl:text-4xl">
             Welcome back
           </h1>
 
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 wrap-break-word text-xs leading-5 text-gray-600 sm:text-sm sm:leading-6">
             Sign in to manage your support requests.
           </p>
         </div>

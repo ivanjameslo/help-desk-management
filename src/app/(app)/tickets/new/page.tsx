@@ -1,12 +1,12 @@
-import { CreateTicketForm } from "@/components/tickets/create-ticket-form";
-import { prisma } from "@/lib/prisma"
-
 import { UserRole } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/auth-guards";
+import { prisma } from "@/lib/prisma";
 
-export default async function NewTicketsPage() {
+import { CreateTicketForm } from "@/components/tickets/create-ticket-form";
+
+export default async function NewTicketPage() {
   await requireRole([UserRole.REQUESTER]);
-  
+
   const categories = await prisma.category.findMany({
     where: {
       isActive: true,
@@ -21,21 +21,21 @@ export default async function NewTicketsPage() {
   });
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="mx-auto w-full max-w-3xl min-w-0">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl 2xl:text-4xl">
           Create Ticket
         </h1>
 
-        <p className="mt-1 text-gray-600">
+        <p className="mt-1 text-sm text-gray-600 sm:text-base 2xl:text-lg">
           Submit a new request to the help desk team.
         </p>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-5 sm:mt-6 lg:mt-8">
         {categories.length === 0 ? (
-          <div className="rounded-xl border bg-white p-6 shadow-sm">
-            <p className="text-sm text-gray-600">
+          <div className="rounded-xl border bg-white p-4 shadow-sm sm:p-6">
+            <p className="wrap-break-word text-xs leading-5 text-gray-600 sm:text-sm sm:leading-6">
               No active ticket categories are available.
             </p>
           </div>

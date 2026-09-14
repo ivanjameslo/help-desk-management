@@ -18,10 +18,7 @@ const DEMO_CATEGORY_NAMES = [
 ] as const;
 
 function createDemoTicketNumber() {
-  return `HD-${randomUUID()
-    .replaceAll("-", "")
-    .slice(0, 8)
-    .toUpperCase()}`;
+  return `HD-${randomUUID().replaceAll("-", "").slice(0, 8).toUpperCase()}`;
 }
 
 export type ResetDemoDataResult = {
@@ -33,109 +30,91 @@ export type ResetDemoDataResult = {
 
 export async function resetDemoData(): Promise<ResetDemoDataResult> {
   const demoRequesterEmail =
-    process.env.DEMO_REQUESTER_EMAIL?.trim().toLowerCase() ??
-    "demo.requester@helpdesk.local";
+    process.env.DEMO_REQUESTER_EMAIL?.trim().toLowerCase() ?? "demo.requester@helpdesk.local";
 
   const demoAgentEmail =
-    process.env.DEMO_AGENT_EMAIL?.trim().toLowerCase() ??
-    "demo.agent@helpdesk.local";
+    process.env.DEMO_AGENT_EMAIL?.trim().toLowerCase() ?? "demo.agent@helpdesk.local";
 
-  const [demoRequester, demoAgent, categories, attachments] =
-    await Promise.all([
-      prisma.user.findFirst({
-        where: {
-          email: {
-            equals: demoRequesterEmail,
-            mode: "insensitive",
-          },
-          role: UserRole.REQUESTER,
-          isActive: true,
-          isDemo: true,
+  const [demoRequester, demoAgent, categories, attachments] = await Promise.all([
+    prisma.user.findFirst({
+      where: {
+        email: {
+          equals: demoRequesterEmail,
+          mode: "insensitive",
         },
-        select: {
-          id: true,
-          name: true,
-        },
-      }),
+        role: UserRole.REQUESTER,
+        isActive: true,
+        isDemo: true,
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    }),
 
-      prisma.user.findFirst({
-        where: {
-          email: {
-            equals: demoAgentEmail,
-            mode: "insensitive",
-          },
-          role: UserRole.AGENT,
-          isActive: true,
-          isDemo: true,
+    prisma.user.findFirst({
+      where: {
+        email: {
+          equals: demoAgentEmail,
+          mode: "insensitive",
         },
-        select: {
-          id: true,
-          name: true,
-        },
-      }),
+        role: UserRole.AGENT,
+        isActive: true,
+        isDemo: true,
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    }),
 
-      prisma.category.findMany({
-        where: {
-          name: {
-            in: [...DEMO_CATEGORY_NAMES],
-          },
+    prisma.category.findMany({
+      where: {
+        name: {
+          in: [...DEMO_CATEGORY_NAMES],
         },
-        select: {
-          id: true,
-          name: true,
-        },
-      }),
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    }),
 
-      prisma.ticketAttachment.findMany({
-        where: {
-          ticket: {
-            OR: [
-              {
+    prisma.ticketAttachment.findMany({
+      where: {
+        ticket: {
+          OR: [
+            {
+              isDemo: true,
+            },
+            {
+              requester: {
                 isDemo: true,
               },
-              {
-                requester: {
-                  isDemo: true,
-                },
-              },
-            ],
-          },
+            },
+          ],
         },
-        select: {
-          url: true,
-        },
-      }),
-    ]);
+      },
+      select: {
+        url: true,
+      },
+    }),
+  ]);
 
   if (!demoRequester) {
-    throw new Error(
-      "The active Demo Requester account could not be found.",
-    );
+    throw new Error("The active Demo Requester account could not be found.");
   }
 
   if (!demoAgent) {
-    throw new Error(
-      "The active Demo Agent account could not be found.",
-    );
+    throw new Error("The active Demo Agent account could not be found.");
   }
 
-  const categoryByName = new Map(
-    categories.map((category) => [
-      category.name,
-      category.id,
-    ]),
-  );
+  const categoryByName = new Map(categories.map((category) => [category.name, category.id]));
 
-  const missingCategories = DEMO_CATEGORY_NAMES.filter(
-    (name) => !categoryByName.has(name),
-  );
+  const missingCategories = DEMO_CATEGORY_NAMES.filter((name) => !categoryByName.has(name));
 
   if (missingCategories.length > 0) {
-    throw new Error(
-      `The following demo categories are missing: ${missingCategories.join(
-        ", ",
-      )}.`,
-    );
+    throw new Error(`The following demo categories are missing: ${missingCategories.join(", ")}.`);
   }
 
   function getCategoryId(name: (typeof DEMO_CATEGORY_NAMES)[number]) {
@@ -150,8 +129,7 @@ export async function resetDemoData(): Promise<ResetDemoDataResult> {
 
   const now = Date.now();
 
-  const minutesAgo = (minutes: number) =>
-    new Date(now - minutes * 60_000);
+  const minutesAgo = (minutes: number) => new Date(now - minutes * 60_000);
 
   const accessCreatedAt = minutesAgo(60);
   const accessAssignedAt = minutesAgo(55);
@@ -167,9 +145,7 @@ export async function resetDemoData(): Promise<ResetDemoDataResult> {
   const hardwareCreatedAt = minutesAgo(240);
   const hardwareResolvedAt = minutesAgo(210);
 
-  const [
-    deletedTickets,
-  ] = await prisma.$transaction([
+  const [deletedTickets] = await prisma.$transaction([
     prisma.ticket.deleteMany({
       where: {
         OR: [
@@ -411,9 +387,7 @@ export async function resetDemoData(): Promise<ResetDemoDataResult> {
 
   if (attachments.length > 0) {
     try {
-      await del(
-        attachments.map((attachment) => attachment.url),
-      );
+      await del(attachments.map((attachment) => attachment.url));
     } catch (error) {
       blobCleanupFailed = true;
 
@@ -422,18 +396,14 @@ export async function resetDemoData(): Promise<ResetDemoDataResult> {
        * prevents an orphaned Blob cleanup failure from restoring
        * or corrupting the reset ticket records.
        */
-      console.error(
-        "Demo data was reset, but Blob cleanup failed:",
-        error,
-      );
+      console.error("Demo data was reset, but Blob cleanup failed:", error);
     }
   }
 
   return {
     deletedTicketCount: deletedTickets.count,
     createdTicketCount: 4,
-    deletedBlobCount:
-      blobCleanupFailed ? 0 : attachments.length,
+    deletedBlobCount: blobCleanupFailed ? 0 : attachments.length,
     blobCleanupFailed,
   };
 }

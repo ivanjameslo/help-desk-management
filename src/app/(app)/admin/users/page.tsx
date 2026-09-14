@@ -40,9 +40,7 @@ export default async function UsersPage() {
   return (
     <div className="mx-auto w-full max-w-7xl">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl 2xl:text-4xl">
-          Manage Users
-        </h1>
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl 2xl:text-4xl">Manage Users</h1>
 
         <p className="mt-1 text-sm text-gray-600 sm:text-base 2xl:text-lg">
           Create accounts and manage system access.
@@ -61,16 +59,12 @@ export default async function UsersPage() {
               Existing Users
             </h2>
 
-            <p className="shrink-0 text-xs text-gray-500 sm:text-sm">
-              {users.length} total
-            </p>
+            <p className="shrink-0 text-xs text-gray-500 sm:text-sm">{users.length} total</p>
           </div>
 
           {users.length === 0 ? (
             <div className="rounded-xl border bg-white p-6 text-center shadow-sm sm:p-8">
-              <p className="text-xs text-gray-500 sm:text-sm">
-                No user accounts are available.
-              </p>
+              <p className="text-xs text-gray-500 sm:text-sm">No user accounts are available.</p>
             </div>
           ) : (
             <div className="space-y-3 sm:space-y-4">

@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { signOut } from "@/auth";
 import { AppSidebar } from "@/components/app-sidebar";
 import { requireUser } from "@/lib/auth-guards";
+import { HelpDeskAssistant } from "@/components/ai/help-desk-assistant";
 
 type AppLayoutProps = {
   children: ReactNode;
@@ -22,9 +23,7 @@ export default async function AppLayout({ children }: AppLayoutProps) {
         <header className="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-3 border-b border-gray-200 bg-white px-4 pl-18 sm:px-6 sm:pl-18 lg:px-6 lg:pl-6 2xl:min-h-20 2xl:px-8">
           <div className="min-w-0">
             <p className="min-w-0 truncate font-semibold text-gray-900">
-              <span className="text-lg sm:hidden">
-                Help Desk
-              </span>
+              <span className="text-lg sm:hidden">Help Desk</span>
 
               <span className="hidden text-sm sm:inline 2xl:text-base">
                 Help Desk Management System
@@ -42,9 +41,7 @@ export default async function AppLayout({ children }: AppLayoutProps) {
                 {user.name}
               </p>
 
-              <p className="mt-0.5 text-xs capitalize text-gray-500 2xl:text-sm">
-                {roleLabel}
-              </p>
+              <p className="mt-0.5 text-xs text-gray-500 capitalize 2xl:text-sm">{roleLabel}</p>
             </div>
 
             <form
@@ -66,10 +63,11 @@ export default async function AppLayout({ children }: AppLayoutProps) {
           </div>
         </header>
 
-        <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8 2xl:p-10">
+        <main className="min-w-0 flex-1 p-4 pb-24 sm:p-6 sm:pb-24 lg:p-8 lg:pb-24 2xl:p-10 2xl:pb-24">
           {children}
         </main>
       </div>
+      <HelpDeskAssistant />
     </div>
   );
 }

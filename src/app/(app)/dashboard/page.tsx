@@ -3,11 +3,7 @@ import Link from "next/link";
 import { DashboardBreakdown } from "@/components/dashboard/dashboard-breakdown";
 import { DashboardStatCard } from "@/components/dashboard/dashboard-stat-card";
 import type { Prisma } from "@/generated/prisma/client";
-import {
-  TicketPriority,
-  TicketStatus,
-  UserRole,
-} from "@/generated/prisma/enums";
+import { TicketPriority, TicketStatus, UserRole } from "@/generated/prisma/enums";
 import { requireUser } from "@/lib/auth-guards";
 import { formatDateTime, formatEnumLabel } from "@/lib/formatters";
 import { prisma } from "@/lib/prisma";
@@ -47,8 +43,7 @@ export default async function DashboardPage() {
    *
    * Agents and administrators receive system-wide data.
    */
-  const ticketAccessWhere: Prisma.TicketWhereInput =
-    getTicketAccessWhere(user);
+  const ticketAccessWhere: Prisma.TicketWhereInput = getTicketAccessWhere(user);
 
   const [
     totalTickets,
@@ -199,43 +194,24 @@ export default async function DashboardPage() {
    * Convert Prisma group results into maps so each
    * enum value can be retrieved easily.
    */
-  const statusCountMap = new Map<
-    TicketStatus,
-    number
-  >(
-    statusGroups.map((group) => [
-      group.status,
-      group._count._all,
-    ]),
+  const statusCountMap = new Map<TicketStatus, number>(
+    statusGroups.map((group) => [group.status, group._count._all]),
   );
 
-  const priorityCountMap = new Map<
-    TicketPriority,
-    number
-  >(
-    priorityGroups.map((group) => [
-      group.priority,
-      group._count._all,
-    ]),
+  const priorityCountMap = new Map<TicketPriority, number>(
+    priorityGroups.map((group) => [group.priority, group._count._all]),
   );
 
-  const activeTicketCount =
-    ACTIVE_STATUSES.reduce(
-      (total, status) =>
-        total + (statusCountMap.get(status) ?? 0),
-      0,
-    );
+  const activeTicketCount = ACTIVE_STATUSES.reduce(
+    (total, status) => total + (statusCountMap.get(status) ?? 0),
+    0,
+  );
 
-  const waitingForUserCount =
-    statusCountMap.get(
-      TicketStatus.WAITING_FOR_USER,
-    ) ?? 0;
+  const waitingForUserCount = statusCountMap.get(TicketStatus.WAITING_FOR_USER) ?? 0;
 
   const completedTicketCount =
-    (statusCountMap.get(TicketStatus.RESOLVED) ??
-      0) +
-    (statusCountMap.get(TicketStatus.CLOSED) ??
-      0);
+    (statusCountMap.get(TicketStatus.RESOLVED) ?? 0) +
+    (statusCountMap.get(TicketStatus.CLOSED) ?? 0);
 
   /*
    * Display different statistics depending on role.
@@ -245,76 +221,63 @@ export default async function DashboardPage() {
         {
           label: "My Tickets",
           value: totalTickets,
-          description:
-            "All help desk requests you submitted.",
+          description: "All help desk requests you submitted.",
         },
         {
           label: "Active Tickets",
           value: activeTicketCount,
-          description:
-            "Tickets that still require attention.",
+          description: "Tickets that still require attention.",
         },
         {
           label: "Waiting for You",
           value: waitingForUserCount,
-          description:
-            "Tickets waiting for your response.",
+          description: "Tickets waiting for your response.",
         },
         {
           label: "Completed",
           value: completedTicketCount,
-          description:
-            "Tickets marked resolved or closed.",
+          description: "Tickets marked resolved or closed.",
         },
       ]
     : [
         {
           label: "Total Tickets",
           value: totalTickets,
-          description:
-            "All tickets currently in the system.",
+          description: "All tickets currently in the system.",
         },
         {
           label: "Active Tickets",
           value: activeTicketCount,
-          description:
-            "Tickets that are not resolved or closed.",
+          description: "Tickets that are not resolved or closed.",
         },
         {
           label: "Unassigned",
           value: unassignedActiveTickets,
-          description:
-            "Active tickets without an assigned agent.",
+          description: "Active tickets without an assigned agent.",
         },
         {
           label: "Urgent",
           value: urgentActiveTickets,
-          description:
-            "Active tickets with urgent priority.",
+          description: "Active tickets with urgent priority.",
         },
       ];
 
-  const statusBreakdown =
-    STATUS_DISPLAY_ORDER.map((status) => ({
-      label: formatEnumLabel(status),
-      value: statusCountMap.get(status) ?? 0,
-    }));
+  const statusBreakdown = STATUS_DISPLAY_ORDER.map((status) => ({
+    label: formatEnumLabel(status),
+    value: statusCountMap.get(status) ?? 0,
+  }));
 
-  const priorityBreakdown =
-    PRIORITY_DISPLAY_ORDER.map((priority) => ({
-      label: formatEnumLabel(priority),
-      value:
-        priorityCountMap.get(priority) ?? 0,
-    }));
+  const priorityBreakdown = PRIORITY_DISPLAY_ORDER.map((priority) => ({
+    label: formatEnumLabel(priority),
+    value: priorityCountMap.get(priority) ?? 0,
+  }));
 
   return (
     <div className="mx-auto max-w-7xl">
       {/* Page heading */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl 2xl:text-4xl">
-            Dashboard
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl 2xl:text-4xl">Dashboard</h1>
 
           <p className="mt-1 text-sm text-gray-600 sm:text-base 2xl:text-lg">
             Welcome back, {user.name}.
@@ -322,16 +285,10 @@ export default async function DashboardPage() {
         </div>
 
         <Link
-          href={
-            isRequester
-              ? "/tickets/new"
-              : "/tickets"
-          }
+          href={isRequester ? "/tickets/new" : "/tickets"}
           className="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-center text-sm font-medium text-white transition hover:bg-slate-700 sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
         >
-          {isRequester
-            ? "Create Ticket"
-            : "View All Tickets"}
+          {isRequester ? "Create Ticket" : "View All Tickets"}
         </Link>
       </div>
 
@@ -381,9 +338,7 @@ export default async function DashboardPage() {
 
           {recentTickets.length === 0 ? (
             <div className="p-6">
-              <p className="text-sm text-gray-500">
-                No tickets are available yet.
-              </p>
+              <p className="text-sm text-gray-500">No tickets are available yet.</p>
             </div>
           ) : (
             <div className="divide-y">
@@ -400,33 +355,22 @@ export default async function DashboardPage() {
                       {ticket.subject}
                     </Link>
 
-                    <p className="mt-1 text-xs font-medium text-gray-500">
-                      {ticket.ticketNumber}
-                    </p>
+                    <p className="mt-1 text-xs font-medium text-gray-500">{ticket.ticketNumber}</p>
 
                     <p className="mt-3 text-sm text-gray-600">
                       {ticket.category.name}
                       {" · "}
-                      {formatEnumLabel(
-                        ticket.priority,
-                      )}{" "}
-                      priority
+                      {formatEnumLabel(ticket.priority)} priority
                     </p>
 
                     <p className="mt-1 text-xs text-gray-500">
                       {isRequester
-                        ? `Assigned to ${
-                            ticket.assignedAgent
-                              ?.name ?? "No agent yet"
-                          }`
+                        ? `Assigned to ${ticket.assignedAgent?.name ?? "No agent yet"}`
                         : `Requested by ${ticket.requester.name}`}
                     </p>
 
                     <p className="mt-1 text-xs text-gray-500">
-                      Updated{" "}
-                      {formatDateTime(
-                        ticket.updatedAt,
-                      )}
+                      Updated {formatDateTime(ticket.updatedAt)}
                     </p>
                   </div>
 
@@ -456,10 +400,7 @@ export default async function DashboardPage() {
           ) : (
             <ol className="divide-y">
               {recentActivities.map((activity) => (
-                <li
-                  key={activity.id}
-                  className="px-4 py-4 sm:px-6 sm:py-5"
-                >
+                <li key={activity.id} className="px-4 py-4 sm:px-6 sm:py-5">
                   <Link
                     href={`/tickets/${activity.ticket.id}`}
                     className="text-xs font-medium text-gray-900 transition hover:text-slate-600 sm:text-sm"
@@ -473,9 +414,7 @@ export default async function DashboardPage() {
 
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <p className="text-[11px] text-gray-500 sm:text-xs">
-                      {formatDateTime(
-                        activity.createdAt,
-                      )}
+                      {formatDateTime(activity.createdAt)}
                     </p>
 
                     {activity.isInternal && (

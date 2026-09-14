@@ -54,9 +54,7 @@ export default async function CategoriesPage() {
               Existing Categories
             </h2>
 
-            <p className="shrink-0 text-xs text-gray-500 sm:text-sm">
-              {categories.length} total
-            </p>
+            <p className="shrink-0 text-xs text-gray-500 sm:text-sm">{categories.length} total</p>
           </div>
 
           {categories.length === 0 ? (

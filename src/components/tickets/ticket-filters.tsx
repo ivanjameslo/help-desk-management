@@ -1,10 +1,7 @@
 import Link from "next/link";
 
 import { formatEnumLabel } from "@/lib/formatters";
-import {
-  TICKET_PRIORITY_VALUES,
-  TICKET_STATUS_VALUES,
-} from "@/lib/validations/ticket-management";
+import { TICKET_PRIORITY_VALUES, TICKET_STATUS_VALUES } from "@/lib/validations/ticket-management";
 
 type TicketFiltersProps = {
   currentFilters: {
@@ -39,13 +36,9 @@ function SelectChevron() {
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
-      className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600"
+      className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-gray-600"
     >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="m6 9 6 6 6-6"
-      />
+      <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
     </svg>
   );
 }
@@ -68,10 +61,7 @@ export function TicketFilters({
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
         {/* Search */}
         <div className="md:col-span-2">
-          <label
-            htmlFor="ticket-search"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="ticket-search" className="block text-sm font-medium text-gray-700">
             Search
           </label>
 
@@ -82,16 +72,13 @@ export function TicketFilters({
             defaultValue={currentFilters.query}
             maxLength={100}
             placeholder="Ticket number or subject"
-            className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-black outline-none transition focus:border-slate-700"
+            className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-black transition outline-none focus:border-slate-700"
           />
         </div>
 
         {/* Status */}
         <div>
-          <label
-            htmlFor="ticket-status"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="ticket-status" className="block text-sm font-medium text-gray-700">
             Status
           </label>
 
@@ -117,10 +104,7 @@ export function TicketFilters({
 
         {/* Priority */}
         <div>
-          <label
-            htmlFor="ticket-priority"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="ticket-priority" className="block text-sm font-medium text-gray-700">
             Priority
           </label>
 
@@ -146,10 +130,7 @@ export function TicketFilters({
 
         {/* Category */}
         <div>
-          <label
-            htmlFor="ticket-category"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="ticket-category" className="block text-sm font-medium text-gray-700">
             Category
           </label>
 
@@ -163,14 +144,9 @@ export function TicketFilters({
               <option value="">All categories</option>
 
               {categories.map((category) => (
-                <option
-                  key={category.id}
-                  value={category.id}
-                >
+                <option key={category.id} value={category.id}>
                   {category.name}
-                  {!category.isActive
-                    ? " (Inactive)"
-                    : ""}
+                  {!category.isActive ? " (Inactive)" : ""}
                 </option>
               ))}
             </select>
@@ -181,10 +157,7 @@ export function TicketFilters({
 
         {/* Sort */}
         <div>
-          <label
-            htmlFor="ticket-sort"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="ticket-sort" className="block text-sm font-medium text-gray-700">
             Sort
           </label>
 
@@ -195,17 +168,11 @@ export function TicketFilters({
               defaultValue={currentFilters.sort}
               className={selectClassName}
             >
-              <option value="newest">
-                Newest First
-              </option>
+              <option value="newest">Newest First</option>
 
-              <option value="oldest">
-                Oldest First
-              </option>
+              <option value="oldest">Oldest First</option>
 
-              <option value="updated">
-                Recently Updated
-              </option>
+              <option value="updated">Recently Updated</option>
             </select>
 
             <SelectChevron />
@@ -216,10 +183,7 @@ export function TicketFilters({
       {/* Assigned Agent */}
       {showAgentFilter && (
         <div className="mt-4 w-full sm:max-w-sm">
-          <label
-            htmlFor="assigned-agent"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="assigned-agent" className="block text-sm font-medium text-gray-700">
             Assigned Agent
           </label>
 
@@ -227,28 +191,17 @@ export function TicketFilters({
             <select
               id="assigned-agent"
               name="assignedAgent"
-              defaultValue={
-                currentFilters.assignedAgentId
-              }
+              defaultValue={currentFilters.assignedAgentId}
               className={selectClassName}
             >
-              <option value="">
-                All assignments
-              </option>
+              <option value="">All assignments</option>
 
-              <option value="unassigned">
-                Unassigned
-              </option>
+              <option value="unassigned">Unassigned</option>
 
               {agents.map((agent) => (
-                <option
-                  key={agent.id}
-                  value={agent.id}
-                >
+                <option key={agent.id} value={agent.id}>
                   {agent.name}
-                  {!agent.isActive
-                    ? " (Inactive)"
-                    : ""}
+                  {!agent.isActive ? " (Inactive)" : ""}
                 </option>
               ))}
             </select>

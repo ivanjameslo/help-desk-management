@@ -34,7 +34,7 @@ export async function uploadTicketAttachment(
     return {
       message: "Attachment uploads are disabled for public demo accounts.",
       success: false,
-    }
+    };
   }
 
   const ticket = await prisma.ticket.findFirst({
@@ -58,8 +58,7 @@ export async function uploadTicketAttachment(
 
   if (ticket.status === TicketStatus.CLOSED) {
     return {
-      message:
-        "Closed tickets cannot receive new attachments.",
+      message: "Closed tickets cannot receive new attachments.",
       success: false,
     };
   }
@@ -99,33 +98,23 @@ export async function uploadTicketAttachment(
   if (!isAllowedAttachmentType(submittedFile.type)) {
     return {
       errors: {
-        file: [
-          "Only JPEG, PNG, WebP, and PDF files are supported.",
-        ],
+        file: ["Only JPEG, PNG, WebP, and PDF files are supported."],
       },
       message: "Select a supported file type.",
       success: false,
     };
   }
 
-  const safeFileName = sanitizeFileName(
-    submittedFile.name,
-  );
+  const safeFileName = sanitizeFileName(submittedFile.name);
 
-  let uploadedBlob:
-    | Awaited<ReturnType<typeof put>>
-    | null = null;
+  let uploadedBlob: Awaited<ReturnType<typeof put>> | null = null;
 
   try {
-    uploadedBlob = await put(
-      `tickets/${ticket.id}/${safeFileName}`,
-      submittedFile,
-      {
-        access: "private",
-        addRandomSuffix: true,
-        contentType: submittedFile.type,
-      },
-    );
+    uploadedBlob = await put(`tickets/${ticket.id}/${safeFileName}`, submittedFile, {
+      access: "private",
+      addRandomSuffix: true,
+      contentType: submittedFile.type,
+    });
 
     await prisma.ticketAttachment.create({
       data: {
@@ -147,21 +136,14 @@ export async function uploadTicketAttachment(
       try {
         await del(uploadedBlob.url);
       } catch (cleanupError) {
-        console.error(
-          "Failed to clean up uploaded blob:",
-          cleanupError,
-        );
+        console.error("Failed to clean up uploaded blob:", cleanupError);
       }
     }
 
-    console.error(
-      "Failed to upload ticket attachment:",
-      error,
-    );
+    console.error("Failed to upload ticket attachment:", error);
 
     return {
-      message:
-        "The attachment could not be uploaded. Please try again.",
+      message: "The attachment could not be uploaded. Please try again.",
       success: false,
     };
   }

@@ -2,9 +2,9 @@ import type { Prisma } from "@/generated/prisma/client";
 import { UserRole } from "@/generated/prisma/enums";
 
 export type TicketAccessUser = {
-    id: string;
-    role: UserRole;
-    isDemo: boolean;
+  id: string;
+  role: UserRole;
+  isDemo: boolean;
 };
 
 /**
@@ -12,33 +12,31 @@ export type TicketAccessUser = {
  * for the current authenticated user.
  */
 
-export function getTicketAccessWhere(
-    user: TicketAccessUser,
-): Prisma.TicketWhereInput {
-    /*
-    * Requesters can only access tickets that they created.
-    */
-    if (user.role === UserRole.REQUESTER) {
-        return {
-            requesterId: user.id,
-        };
-    }
+export function getTicketAccessWhere(user: TicketAccessUser): Prisma.TicketWhereInput {
+  /*
+   * Requesters can only access tickets that they created.
+   */
+  if (user.role === UserRole.REQUESTER) {
+    return {
+      requesterId: user.id,
+    };
+  }
 
-    /*
-    * Demo Agents and any future Demo Administrators
-    * can access demo tickets only.
-    */
-    if (user.isDemo) {
-        return {
-            isDemo: true,
-        };
-    }
+  /*
+   * Demo Agents and any future Demo Administrators
+   * can access demo tickets only.
+   */
+  if (user.isDemo) {
+    return {
+      isDemo: true,
+    };
+  }
 
-    /*
-    * Private Agents and Administrators can access
-    * all tickets.
-    */
-    return {};
+  /*
+   * Private Agents and Administrators can access
+   * all tickets.
+   */
+  return {};
 }
 
 /**
@@ -56,28 +54,27 @@ export function getTicketAccessWhere(
  */
 
 export function getTicketActivityAccessWhere(
-    user: TicketAccessUser,
+  user: TicketAccessUser,
 ): Prisma.TicketActivityWhereInput {
-    const ticketWhere = getTicketAccessWhere(user);
+  const ticketWhere = getTicketAccessWhere(user);
 
-    const hasTicketRestriction =
-        Object.keys(ticketWhere).length > 0;
+  const hasTicketRestriction = Object.keys(ticketWhere).length > 0;
 
-    return {
-        ...(user.role === UserRole.REQUESTER
-            ? {
-                isInternal: false,
-              }
-            : {}),
+  return {
+    ...(user.role === UserRole.REQUESTER
+      ? {
+          isInternal: false,
+        }
+      : {}),
 
-        ...(hasTicketRestriction
-            ? {
-                ticket: {
-                    is: ticketWhere,
-                },
-              }
-            : {}),
-    };
+    ...(hasTicketRestriction
+      ? {
+          ticket: {
+            is: ticketWhere,
+          },
+        }
+      : {}),
+  };
 }
 
 /**
@@ -86,19 +83,19 @@ export function getTicketActivityAccessWhere(
  */
 
 export function canAccessTicket(
-    user: TicketAccessUser,
-    ticket: {
-        requesterId: string;
-        isDemo: boolean;
-    },
+  user: TicketAccessUser,
+  ticket: {
+    requesterId: string;
+    isDemo: boolean;
+  },
 ) {
-    if (user.role === UserRole.REQUESTER) {
-        return ticket.requesterId === user.id;
-    }
+  if (user.role === UserRole.REQUESTER) {
+    return ticket.requesterId === user.id;
+  }
 
-    if (user.isDemo) {
-        return ticket.isDemo;
-    } 
+  if (user.isDemo) {
+    return ticket.isDemo;
+  }
 
-    return true;
+  return true;
 }

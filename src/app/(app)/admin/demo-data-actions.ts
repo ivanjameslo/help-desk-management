@@ -15,14 +15,11 @@ export async function resetDemoDataAction(
   _previousState: ResetDemoDataState,
   formData: FormData,
 ): Promise<ResetDemoDataState> {
-  const currentAdmin = await requireRole([
-    UserRole.ADMIN,
-  ]);
+  const currentAdmin = await requireRole([UserRole.ADMIN]);
 
   if (currentAdmin.isDemo) {
     return {
-      message:
-        "Demo accounts cannot reset the shared demo data.",
+      message: "Demo accounts cannot reset the shared demo data.",
       success: false,
     };
   }
@@ -59,8 +56,7 @@ export async function resetDemoDataAction(
     console.error("Failed to reset demo data:", error);
 
     return {
-      message:
-        "The demo data could not be reset. Please try again.",
+      message: "The demo data could not be reset. Please try again.",
       success: false,
     };
   }

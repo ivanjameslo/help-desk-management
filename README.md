@@ -71,33 +71,33 @@ Administrators can:
 
 The system supports three roles:
 
-| Role | Description |
-|---|---|
-| Requester | Creates support requests and communicates with support staff |
-| Agent | Processes, assigns, updates, and responds to tickets |
-| Administrator | Manages the entire system, including users and categories |
+| Role          | Description                                                  |
+| ------------- | ------------------------------------------------------------ |
+| Requester     | Creates support requests and communicates with support staff |
+| Agent         | Processes, assigns, updates, and responds to tickets         |
+| Administrator | Manages the entire system, including users and categories    |
 
 ## Ticket Workflow
 
 Tickets support the following statuses:
 
-| Status | Description |
-|---|---|
-| Open | Newly submitted and awaiting review |
-| Assigned | Assigned to a support agent |
-| In Progress | Currently being investigated or processed |
+| Status           | Description                                        |
+| ---------------- | -------------------------------------------------- |
+| Open             | Newly submitted and awaiting review                |
+| Assigned         | Assigned to a support agent                        |
+| In Progress      | Currently being investigated or processed          |
 | Waiting for User | Requires additional information from the requester |
-| Resolved | The reported issue has been resolved |
-| Closed | The ticket workflow has been completed |
+| Resolved         | The reported issue has been resolved               |
+| Closed           | The ticket workflow has been completed             |
 
 ## Ticket Priorities
 
-| Priority | Intended Use |
-|---|---|
-| Low | Minor issues with little operational impact |
-| Medium | Standard support requests |
-| High | Important issues requiring timely attention |
-| Urgent | Critical issues requiring immediate action |
+| Priority | Intended Use                                |
+| -------- | ------------------------------------------- |
+| Low      | Minor issues with little operational impact |
+| Medium   | Standard support requests                   |
+| High     | Important issues requiring timely attention |
+| Urgent   | Critical issues requiring immediate action  |
 
 ## Ticket Categories
 
@@ -423,7 +423,6 @@ The production deployment has been tested for:
 ### Manage Users
 
 ![Ticket Details](public/screenshots/manage-categories.png)
-
 
 ## Future Improvements
 

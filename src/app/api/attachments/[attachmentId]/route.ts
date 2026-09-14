@@ -11,10 +11,7 @@ type AttachmentRouteProps = {
   }>;
 };
 
-export async function GET(
-  _request: Request,
-  { params }: AttachmentRouteProps,
-) {
+export async function GET(_request: Request, { params }: AttachmentRouteProps) {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -43,28 +40,24 @@ export async function GET(
 
   const { attachmentId } = await params;
 
-  const attachment =
-    await prisma.ticketAttachment.findFirst({
-      where: {
-        id: attachmentId,
+  const attachment = await prisma.ticketAttachment.findFirst({
+    where: {
+      id: attachmentId,
 
-        ticket: {
-          is: getTicketAccessWhere(user),
-        },
+      ticket: {
+        is: getTicketAccessWhere(user),
       },
-      select: {
-        id: true,
-        fileName: true,
-        pathname: true,
-        contentType: true,
-      },
-    });
+    },
+    select: {
+      id: true,
+      fileName: true,
+      pathname: true,
+      contentType: true,
+    },
+  });
 
   if (!attachment) {
-    console.error(
-      "Attachment record not found:",
-      attachmentId,
-    );
+    console.error("Attachment record not found:", attachmentId);
 
     return new NextResponse("Not found", {
       status: 404,
@@ -78,49 +71,37 @@ export async function GET(
     });
 
     if (!result?.stream) {
-        console.error(
-            "Blob file could not be retrieved:",
-            {
-            attachmentId: attachment.id,
-            pathname: attachment.pathname,
-            hasResult: Boolean(result),
-            hasStream: Boolean(result?.stream),
-            },
-        );
+      console.error("Blob file could not be retrieved:", {
+        attachmentId: attachment.id,
+        pathname: attachment.pathname,
+        hasResult: Boolean(result),
+        hasStream: Boolean(result?.stream),
+      });
 
-        return new NextResponse("Not found", {
-            status: 404,
-        });
+      return new NextResponse("Not found", {
+        status: 404,
+      });
     }
 
     return new NextResponse(result.stream, {
       status: 200,
 
       headers: {
-        "Content-Type":
-          result.blob.contentType ??
-          attachment.contentType,
+        "Content-Type": result.blob.contentType ?? attachment.contentType,
 
-        "Content-Disposition":
-          `attachment; filename*=UTF-8''${encodeURIComponent(
-            attachment.fileName,
-          )}`,
+        "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(
+          attachment.fileName,
+        )}`,
 
         "X-Content-Type-Options": "nosniff",
         "Cache-Control": "private, no-store",
       },
     });
   } catch (error) {
-    console.error(
-      "Failed to download attachment:",
-      error,
-    );
+    console.error("Failed to download attachment:", error);
 
-    return new NextResponse(
-      "The attachment could not be downloaded.",
-      {
-        status: 500,
-      },
-    );
+    return new NextResponse("The attachment could not be downloaded.", {
+      status: 500,
+    });
   }
 }

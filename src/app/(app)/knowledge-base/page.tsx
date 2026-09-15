@@ -10,9 +10,7 @@ type KnowledgeBasePageProps = {
   }>;
 };
 
-function getSingleValue(
-  value: string | string[] | undefined,
-) {
+function getSingleValue(value: string | string[] | undefined) {
   if (Array.isArray(value)) {
     return value[0] ?? "";
   }
@@ -21,64 +19,54 @@ function getSingleValue(
 }
 
 function normalizeSearchValue(value: string) {
-    return value
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "");
+  return value.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-export default async function KnowledgeBasePage({
-  searchParams,
-}: KnowledgeBasePageProps) {
+export default async function KnowledgeBasePage({ searchParams }: KnowledgeBasePageProps) {
   await requireUser();
 
   const parameters = await searchParams;
 
-  const query = getSingleValue(parameters.q)
-    .trim()
-    .slice(0, 100);
+  const query = getSingleValue(parameters.q).trim().slice(0, 100);
 
-  const allArticles =
-    await prisma.knowledgeArticle.findMany({
-        where: {
-        isPublished: true,
-        },
+  const allArticles = await prisma.knowledgeArticle.findMany({
+    where: {
+      isPublished: true,
+    },
 
-        orderBy: {
-        updatedAt: "desc",
-        },
+    orderBy: {
+      updatedAt: "desc",
+    },
 
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      summary: true,
+      content: true,
+      updatedAt: true,
+
+      category: {
         select: {
-        id: true,
-        title: true,
-        slug: true,
-        summary: true,
-        content: true,
-        updatedAt: true,
-
-        category: {
-            select: {
-            name: true,
-            },
+          name: true,
         },
-        },
-    });
+      },
+    },
+  });
 
-    const normalizedQuery =
-    normalizeSearchValue(query);
+  const normalizedQuery = normalizeSearchValue(query);
 
-    const articles = query
+  const articles = query
     ? allArticles.filter((article) => {
         const searchableText = [
-            article.title,
-            article.summary ?? "",
-            article.content,
-            article.category?.name ?? "",
+          article.title,
+          article.summary ?? "",
+          article.content,
+          article.category?.name ?? "",
         ].join(" ");
 
-        return normalizeSearchValue(
-            searchableText,
-        ).includes(normalizedQuery);
-        })
+        return normalizeSearchValue(searchableText).includes(normalizedQuery);
+      })
     : allArticles;
 
   return (
@@ -94,11 +82,7 @@ export default async function KnowledgeBasePage({
       </div>
 
       {/* Search */}
-      <form
-        action="/knowledge-base"
-        method="get"
-        className="mt-6 flex flex-col gap-3 sm:flex-row"
-      >
+      <form action="/knowledge-base" method="get" className="mt-6 flex flex-col gap-3 sm:flex-row">
         <div className="min-w-0 flex-1">
           <label htmlFor="knowledge-search" className="sr-only">
             Search knowledge base
@@ -111,7 +95,7 @@ export default async function KnowledgeBasePage({
             defaultValue={query}
             maxLength={100}
             placeholder="Search help articles..."
-            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-slate-700"
+            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 transition outline-none placeholder:text-gray-400 focus:border-slate-700"
           />
         </div>
 
@@ -128,16 +112,12 @@ export default async function KnowledgeBasePage({
         <p className="text-xs text-gray-500 sm:text-sm">
           {query ? (
             <>
-              {articles.length}{" "}
-              {articles.length === 1 ? "result" : "results"} for{" "}
-              <span className="font-medium text-gray-700">
-                &quot;{query}&quot;
-              </span>
+              {articles.length} {articles.length === 1 ? "result" : "results"} for{" "}
+              <span className="font-medium text-gray-700">&quot;{query}&quot;</span>
             </>
           ) : (
             <>
-              {articles.length}{" "}
-              {articles.length === 1 ? "article" : "articles"} available
+              {articles.length} {articles.length === 1 ? "article" : "articles"} available
             </>
           )}
         </p>
@@ -157,9 +137,7 @@ export default async function KnowledgeBasePage({
         {articles.length === 0 ? (
           <section className="rounded-xl border bg-white p-6 text-center shadow-sm sm:p-8">
             <h2 className="text-sm font-semibold text-gray-900 sm:text-base">
-              {query
-                ? "No matching articles"
-                : "No articles available yet"}
+              {query ? "No matching articles" : "No articles available yet"}
             </h2>
 
             <p className="mt-2 text-xs leading-5 text-gray-500 sm:text-sm sm:leading-6">
@@ -181,7 +159,7 @@ export default async function KnowledgeBasePage({
                   </span>
                 </div>
 
-                <h2 className="mt-4 wrap-break-word text-base font-semibold text-gray-900 sm:text-lg">
+                <h2 className="mt-4 text-base font-semibold wrap-break-word text-gray-900 sm:text-lg">
                   <Link
                     href={`/knowledge-base/${article.slug}`}
                     className="transition hover:text-slate-600"
@@ -190,7 +168,7 @@ export default async function KnowledgeBasePage({
                   </Link>
                 </h2>
 
-                <p className="mt-2 wrap-break-word text-xs leading-5 text-gray-600 sm:text-sm sm:leading-6">
+                <p className="mt-2 text-xs leading-5 wrap-break-word text-gray-600 sm:text-sm sm:leading-6">
                   {article.summary ?? "No summary provided."}
                 </p>
 

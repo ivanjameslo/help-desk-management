@@ -7,11 +7,7 @@ export const knowledgeArticleSchema = z.object({
     .min(5, "Title must be at least 5 characters.")
     .max(160, "Title must be 160 characters or fewer."),
 
-  summary: z
-    .string()
-    .trim()
-    .max(300, "Summary must be 300 characters or fewer.")
-    .optional(),
+  summary: z.string().trim().max(300, "Summary must be 300 characters or fewer.").optional(),
 
   content: z
     .string()

@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  useActionState,
-  useEffect,
-  useRef,
-} from "react";
+import { useActionState, useEffect, useRef } from "react";
 
 import { createKnowledgeArticle } from "@/app/(app)/admin/knowledge-base/actions";
 import type { CreateKnowledgeArticleState } from "@/lib/validations/knowledge-article";
@@ -18,20 +14,12 @@ type CreateKnowledgeArticleFormProps = {
   categories: CategoryOption[];
 };
 
-const initialState: CreateKnowledgeArticleState =
-  {};
+const initialState: CreateKnowledgeArticleState = {};
 
-export function CreateKnowledgeArticleForm({
-  categories,
-}: CreateKnowledgeArticleFormProps) {
-  const formRef =
-    useRef<HTMLFormElement>(null);
+export function CreateKnowledgeArticleForm({ categories }: CreateKnowledgeArticleFormProps) {
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const [state, formAction, pending] =
-    useActionState(
-      createKnowledgeArticle,
-      initialState,
-    );
+  const [state, formAction, pending] = useActionState(createKnowledgeArticle, initialState);
 
   useEffect(() => {
     if (state.success) {
@@ -46,9 +34,7 @@ export function CreateKnowledgeArticleForm({
       className="min-w-0 rounded-xl border bg-white p-4 shadow-sm sm:p-6"
     >
       <div>
-        <h2 className="text-base font-semibold text-gray-900 sm:text-lg">
-          Create Article
-        </h2>
+        <h2 className="text-base font-semibold text-gray-900 sm:text-lg">Create Article</h2>
 
         <p className="mt-1 text-xs leading-5 text-gray-500 sm:text-sm">
           Add a help article that users and the AI assistant can use.
@@ -57,10 +43,7 @@ export function CreateKnowledgeArticleForm({
 
       {/* Title */}
       <div className="mt-5">
-        <label
-          htmlFor="kb-title"
-          className="block text-xs font-medium text-gray-700 sm:text-sm"
-        >
+        <label htmlFor="kb-title" className="block text-xs font-medium text-gray-700 sm:text-sm">
           Title
         </label>
 
@@ -72,27 +55,19 @@ export function CreateKnowledgeArticleForm({
           minLength={5}
           maxLength={160}
           placeholder="Troubleshooting Office Wi-Fi"
-          className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black outline-none transition placeholder:text-gray-400 focus:border-slate-700 sm:text-sm"
+          className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black transition outline-none placeholder:text-gray-400 focus:border-slate-700 sm:text-sm"
         />
 
-        {state.errors?.title?.map(
-          (error) => (
-            <p
-              key={error}
-              className="mt-1 text-xs text-red-600 sm:text-sm"
-            >
-              {error}
-            </p>
-          ),
-        )}
+        {state.errors?.title?.map((error) => (
+          <p key={error} className="mt-1 text-xs text-red-600 sm:text-sm">
+            {error}
+          </p>
+        ))}
       </div>
 
       {/* Category */}
       <div className="mt-4">
-        <label
-          htmlFor="kb-category"
-          className="block text-xs font-medium text-gray-700 sm:text-sm"
-        >
+        <label htmlFor="kb-category" className="block text-xs font-medium text-gray-700 sm:text-sm">
           Category
         </label>
 
@@ -100,42 +75,27 @@ export function CreateKnowledgeArticleForm({
           id="kb-category"
           name="categoryId"
           defaultValue=""
-          className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-xs text-black outline-none transition focus:border-slate-700 sm:text-sm"
+          className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-xs text-black transition outline-none focus:border-slate-700 sm:text-sm"
         >
-          <option value="">
-            General
-          </option>
+          <option value="">General</option>
 
-          {categories.map(
-            (category) => (
-              <option
-                key={category.id}
-                value={category.id}
-              >
-                {category.name}
-              </option>
-            ),
-          )}
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
         </select>
 
-        {state.errors?.categoryId?.map(
-          (error) => (
-            <p
-              key={error}
-              className="mt-1 text-xs text-red-600 sm:text-sm"
-            >
-              {error}
-            </p>
-          ),
-        )}
+        {state.errors?.categoryId?.map((error) => (
+          <p key={error} className="mt-1 text-xs text-red-600 sm:text-sm">
+            {error}
+          </p>
+        ))}
       </div>
 
       {/* Summary */}
       <div className="mt-4">
-        <label
-          htmlFor="kb-summary"
-          className="block text-xs font-medium text-gray-700 sm:text-sm"
-        >
+        <label htmlFor="kb-summary" className="block text-xs font-medium text-gray-700 sm:text-sm">
           Summary
         </label>
 
@@ -145,27 +105,19 @@ export function CreateKnowledgeArticleForm({
           rows={3}
           maxLength={300}
           placeholder="Briefly explain what this article helps the user solve."
-          className="mt-2 min-h-20 w-full resize-y rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black outline-none transition placeholder:text-gray-400 focus:border-slate-700 sm:text-sm"
+          className="mt-2 min-h-20 w-full resize-y rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black transition outline-none placeholder:text-gray-400 focus:border-slate-700 sm:text-sm"
         />
 
-        {state.errors?.summary?.map(
-          (error) => (
-            <p
-              key={error}
-              className="mt-1 text-xs text-red-600 sm:text-sm"
-            >
-              {error}
-            </p>
-          ),
-        )}
+        {state.errors?.summary?.map((error) => (
+          <p key={error} className="mt-1 text-xs text-red-600 sm:text-sm">
+            {error}
+          </p>
+        ))}
       </div>
 
       {/* Content */}
       <div className="mt-4">
-        <label
-          htmlFor="kb-content"
-          className="block text-xs font-medium text-gray-700 sm:text-sm"
-        >
+        <label htmlFor="kb-content" className="block text-xs font-medium text-gray-700 sm:text-sm">
           Article Content
         </label>
 
@@ -186,19 +138,14 @@ If you are unable to connect to the office Wi-Fi:
 4. Forget the network and reconnect.
 
 If the issue continues, create a support ticket.`}
-          className="mt-2 min-h-72 w-full resize-y rounded-lg border border-gray-300 px-3 py-2.5 text-xs leading-5 text-black outline-none transition placeholder:text-gray-400 focus:border-slate-700 sm:text-sm sm:leading-6"
+          className="mt-2 min-h-72 w-full resize-y rounded-lg border border-gray-300 px-3 py-2.5 text-xs leading-5 text-black transition outline-none placeholder:text-gray-400 focus:border-slate-700 sm:text-sm sm:leading-6"
         />
 
-        {state.errors?.content?.map(
-          (error) => (
-            <p
-              key={error}
-              className="mt-1 text-xs text-red-600 sm:text-sm"
-            >
-              {error}
-            </p>
-          ),
-        )}
+        {state.errors?.content?.map((error) => (
+          <p key={error} className="mt-1 text-xs text-red-600 sm:text-sm">
+            {error}
+          </p>
+        ))}
       </div>
 
       {/* Publish */}
@@ -215,7 +162,8 @@ If the issue continues, create a support ticket.`}
           </span>
 
           <span className="mt-1 block text-[11px] leading-5 text-gray-500 sm:text-xs">
-            Published articles are visible to users. Leave unchecked to save this article as a draft.
+            Published articles are visible to users. Leave unchecked to save this article as a
+            draft.
           </span>
         </span>
       </label>
@@ -224,9 +172,7 @@ If the issue continues, create a support ticket.`}
         <p
           aria-live="polite"
           className={`mt-4 rounded-lg px-3 py-2.5 text-xs sm:text-sm ${
-            state.success
-              ? "bg-green-50 text-green-700"
-              : "bg-red-50 text-red-700"
+            state.success ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
           }`}
         >
           {state.message}
@@ -239,9 +185,7 @@ If the issue continues, create a support ticket.`}
           disabled={pending}
           className="w-full rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {pending
-            ? "Saving article..."
-            : "Save Article"}
+          {pending ? "Saving article..." : "Save Article"}
         </button>
       </div>
     </form>

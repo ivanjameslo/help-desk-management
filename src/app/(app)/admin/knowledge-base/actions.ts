@@ -47,90 +47,68 @@ export async function createKnowledgeArticle(
   formData: FormData,
 ): Promise<CreateKnowledgeArticleState> {
   try {
-    const admin = await requireRole([
-      UserRole.ADMIN,
-    ]);
+    const admin = await requireRole([UserRole.ADMIN]);
 
-    const parsed =
-      knowledgeArticleSchema.safeParse({
-        title: formData.get("title"),
-        summary:
-          formData.get("summary") || undefined,
-        content: formData.get("content"),
-        categoryId:
-          formData.get("categoryId") || undefined,
-        isPublished:
-          formData.get("isPublished") === "on",
-      });
+    const parsed = knowledgeArticleSchema.safeParse({
+      title: formData.get("title"),
+      summary: formData.get("summary") || undefined,
+      content: formData.get("content"),
+      categoryId: formData.get("categoryId") || undefined,
+      isPublished: formData.get("isPublished") === "on",
+    });
 
     if (!parsed.success) {
       return {
         success: false,
 
-        errors:
-          parsed.error.flatten()
-            .fieldErrors,
+        errors: parsed.error.flatten().fieldErrors,
 
-        message:
-          "Please correct the highlighted fields.",
+        message: "Please correct the highlighted fields.",
       };
     }
 
-    const {
-      title,
-      summary,
-      content,
-      categoryId,
-      isPublished,
-    } = parsed.data;
+    const { title, summary, content, categoryId, isPublished } = parsed.data;
 
     /*
      * Make sure an optional category really
      * exists before saving it.
      */
     if (categoryId) {
-      const category =
-        await prisma.category.findUnique({
-          where: {
-            id: categoryId,
-          },
+      const category = await prisma.category.findUnique({
+        where: {
+          id: categoryId,
+        },
 
-          select: {
-            id: true,
-          },
-        });
+        select: {
+          id: true,
+        },
+      });
 
       if (!category) {
         return {
           success: false,
 
           errors: {
-            categoryId: [
-              "The selected category does not exist.",
-            ],
+            categoryId: ["The selected category does not exist."],
           },
 
-          message:
-            "Please select a valid category.",
+          message: "Please select a valid category.",
         };
       }
     }
 
-    const slug =
-      await getUniqueSlug(title);
+    const slug = await getUniqueSlug(title);
 
     await prisma.knowledgeArticle.create({
       data: {
         title,
         slug,
 
-        summary:
-          summary?.trim() || null,
+        summary: summary?.trim() || null,
 
         content,
 
-        categoryId:
-          categoryId || null,
+        categoryId: categoryId || null,
 
         isPublished,
 
@@ -138,30 +116,22 @@ export async function createKnowledgeArticle(
       },
     });
 
-    revalidatePath(
-      "/admin/knowledge-base",
-    );
+    revalidatePath("/admin/knowledge-base");
 
     revalidatePath("/knowledge-base");
 
     return {
       success: true,
 
-      message: isPublished
-        ? "Article published successfully."
-        : "Article saved as a draft.",
+      message: isPublished ? "Article published successfully." : "Article saved as a draft.",
     };
   } catch (error) {
-    console.error(
-      "Create knowledge article error:",
-      error,
-    );
+    console.error("Create knowledge article error:", error);
 
     return {
       success: false,
 
-      message:
-        "Unable to create the article. Please try again.",
+      message: "Unable to create the article. Please try again.",
     };
   }
 }
@@ -174,82 +144,64 @@ export async function updateKnowledgeArticle(
   try {
     await requireRole([UserRole.ADMIN]);
 
-    const parsed =
-      knowledgeArticleSchema.safeParse({
-        title: formData.get("title"),
-        summary:
-          formData.get("summary") || undefined,
-        content: formData.get("content"),
-        categoryId:
-          formData.get("categoryId") || undefined,
-        isPublished:
-          formData.get("isPublished") === "on",
-      });
+    const parsed = knowledgeArticleSchema.safeParse({
+      title: formData.get("title"),
+      summary: formData.get("summary") || undefined,
+      content: formData.get("content"),
+      categoryId: formData.get("categoryId") || undefined,
+      isPublished: formData.get("isPublished") === "on",
+    });
 
     if (!parsed.success) {
       return {
         success: false,
 
-        errors:
-          parsed.error.flatten().fieldErrors,
+        errors: parsed.error.flatten().fieldErrors,
 
-        message:
-          "Please correct the highlighted fields.",
+        message: "Please correct the highlighted fields.",
       };
     }
 
-    const existingArticle =
-      await prisma.knowledgeArticle.findUnique({
-        where: {
-          id: articleId,
-        },
+    const existingArticle = await prisma.knowledgeArticle.findUnique({
+      where: {
+        id: articleId,
+      },
 
-        select: {
-          id: true,
-          slug: true,
-        },
-      });
+      select: {
+        id: true,
+        slug: true,
+      },
+    });
 
     if (!existingArticle) {
       return {
         success: false,
-        message:
-          "The article could not be found.",
+        message: "The article could not be found.",
       };
     }
 
-    const {
-      title,
-      summary,
-      content,
-      categoryId,
-      isPublished,
-    } = parsed.data;
+    const { title, summary, content, categoryId, isPublished } = parsed.data;
 
     if (categoryId) {
-      const category =
-        await prisma.category.findUnique({
-          where: {
-            id: categoryId,
-          },
+      const category = await prisma.category.findUnique({
+        where: {
+          id: categoryId,
+        },
 
-          select: {
-            id: true,
-          },
-        });
+        select: {
+          id: true,
+        },
+      });
 
       if (!category) {
         return {
           success: false,
 
           errors: {
-            categoryId: [
-              "The selected category does not exist.",
-            ],
+            categoryId: ["The selected category does not exist."],
           },
 
-          message:
-            "Please select a valid category.",
+          message: "Please select a valid category.",
         };
       }
     }
@@ -262,69 +214,53 @@ export async function updateKnowledgeArticle(
       data: {
         title,
 
-        summary:
-          summary?.trim() || null,
+        summary: summary?.trim() || null,
 
         content,
 
-        categoryId:
-          categoryId || null,
+        categoryId: categoryId || null,
 
         isPublished,
       },
     });
 
-    revalidatePath(
-      "/admin/knowledge-base",
-    );
+    revalidatePath("/admin/knowledge-base");
 
-    revalidatePath(
-      `/admin/knowledge-base/${articleId}/edit`,
-    );
+    revalidatePath(`/admin/knowledge-base/${articleId}/edit`);
 
     revalidatePath("/knowledge-base");
 
-    revalidatePath(
-      `/knowledge-base/${existingArticle.slug}`,
-    );
+    revalidatePath(`/knowledge-base/${existingArticle.slug}`);
 
     return {
       success: true,
-      message:
-        "Article updated successfully.",
+      message: "Article updated successfully.",
     };
   } catch (error) {
-    console.error(
-      "Update knowledge article error:",
-      error,
-    );
+    console.error("Update knowledge article error:", error);
 
     return {
       success: false,
 
-      message:
-        "Unable to update the article. Please try again.",
+      message: "Unable to update the article. Please try again.",
     };
   }
 }
 
-export async function deleteKnowledgeArticle(
-  articleId: string,
-) {
+export async function deleteKnowledgeArticle(articleId: string) {
   try {
     await requireRole([UserRole.ADMIN]);
 
-    const article =
-      await prisma.knowledgeArticle.findUnique({
-        where: {
-          id: articleId,
-        },
+    const article = await prisma.knowledgeArticle.findUnique({
+      where: {
+        id: articleId,
+      },
 
-        select: {
-          id: true,
-          slug: true,
-        },
-      });
+      select: {
+        id: true,
+        slug: true,
+      },
+    });
 
     if (!article) {
       return {
@@ -339,31 +275,22 @@ export async function deleteKnowledgeArticle(
       },
     });
 
-    revalidatePath(
-      "/admin/knowledge-base",
-    );
+    revalidatePath("/admin/knowledge-base");
 
     revalidatePath("/knowledge-base");
 
-    revalidatePath(
-      `/knowledge-base/${article.slug}`,
-    );
+    revalidatePath(`/knowledge-base/${article.slug}`);
 
     return {
       success: true,
-      message:
-        "Article deleted successfully.",
+      message: "Article deleted successfully.",
     };
   } catch (error) {
-    console.error(
-      "Delete knowledge article error:",
-      error,
-    );
+    console.error("Delete knowledge article error:", error);
 
     return {
       success: false,
-      message:
-        "Unable to delete the article. Please try again.",
+      message: "Unable to delete the article. Please try again.",
     };
   }
 }

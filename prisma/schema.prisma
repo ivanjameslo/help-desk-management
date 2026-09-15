@@ -52,6 +52,7 @@ model User {
   comments         TicketComment[]
   activities       TicketActivity[]
   attachments      TicketAttachment[]
+  knowledgeArticles KnowledgeArticle[]
 }
 
 model Category {
@@ -63,6 +64,7 @@ model Category {
   updatedAt   DateTime @updatedAt
 
   tickets Ticket[]
+  knowledgeArticles KnowledgeArticle[]
 }
 
 model Ticket {
@@ -146,4 +148,26 @@ model TicketAttachment {
 
   @@index([ticketId, createdAt])
   @@index([uploadedById])
+}
+
+model KnowledgeArticle {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  summary     String?
+  content     String
+  isPublished Boolean  @default(false)
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([createdById])
+  @@index([isPublished])
 }

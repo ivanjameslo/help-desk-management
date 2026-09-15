@@ -35,6 +35,11 @@ const navigation: NavigationItem[] = [
     allowedRoles: ["REQUESTER"],
   },
   {
+    href: "/knowledge-base",
+    label: "Knowledge Base",
+    allowedRoles: allRoles,
+  },
+  {
     label: "Manage Users",
     href: "/admin/users",
     allowedRoles: ["ADMIN"],
@@ -42,6 +47,11 @@ const navigation: NavigationItem[] = [
   {
     label: "Categories",
     href: "/admin/categories",
+    allowedRoles: ["ADMIN"],
+  },
+  {
+    href: "/admin/knowledge-base",
+    label: "Manage Knowledge Base",
     allowedRoles: ["ADMIN"],
   },
 ];

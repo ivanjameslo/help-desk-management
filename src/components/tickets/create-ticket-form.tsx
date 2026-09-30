@@ -25,7 +25,7 @@ type AiDraft = {
 const initialState: CreateTicketState = {};
 
 const selectClassName =
-  "w-full appearance-none rounded-lg border border-gray-300 bg-white py-2.5 pl-3 pr-12 text-xs text-black outline-none transition focus:border-slate-600 sm:text-sm";
+  "w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3 pr-12 text-xs text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 sm:text-sm";
 
 function SelectChevron() {
   return (
@@ -35,7 +35,7 @@ function SelectChevron() {
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
-      className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-gray-700"
+      className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-slate-700"
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
     </svg>
@@ -121,7 +121,7 @@ export function CreateTicketForm({ categories }: CreateTicketFormProps) {
   return (
     <form
       action={formAction}
-      className="grid min-w-0 gap-4 rounded-xl border bg-white p-4 shadow-sm sm:gap-5 sm:p-6 md:grid-cols-2"
+      className="grid min-w-0 gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:gap-5 sm:p-6 md:grid-cols-2"
     >
       {/* AI Ticket Assistant */}
       <section className="min-w-0 rounded-xl border border-violet-200 bg-violet-50 p-4 sm:p-5 md:col-span-2">
@@ -155,7 +155,7 @@ export function CreateTicketForm({ categories }: CreateTicketFormProps) {
             rows={4}
             maxLength={3000}
             placeholder="Example: My laptop keeps disconnecting from the office Wi-Fi every few minutes. I already restarted it but the problem continues."
-            className="mt-2 min-h-28 w-full min-w-0 resize-y rounded-lg border border-violet-200 bg-white px-3 py-2.5 text-xs text-black transition outline-none placeholder:text-gray-400 focus:border-violet-500 sm:text-sm"
+            className="mt-2 min-h-28 w-full min-w-0 resize-y rounded-lg border border-violet-200 bg-white px-3 py-2.5 text-xs text-black transition outline-none placeholder:text-slate-400 focus:border-violet-500 sm:text-sm"
           />
 
           <div className="mt-1 flex justify-end">
@@ -182,11 +182,11 @@ export function CreateTicketForm({ categories }: CreateTicketFormProps) {
               </span>
             </div>
 
-            <p className="mt-2 text-xs leading-5 wrap-break-word text-gray-600 sm:text-sm sm:leading-6">
+            <p className="mt-2 text-xs leading-5 wrap-break-word text-slate-600 sm:text-sm sm:leading-6">
               {aiNote}
             </p>
 
-            <p className="mt-2 text-[11px] leading-5 text-gray-500 sm:text-xs">
+            <p className="mt-2 text-[11px] leading-5 text-slate-500 sm:text-xs">
               Review and edit the generated ticket fields below before submitting.
             </p>
           </div>
@@ -210,7 +210,7 @@ export function CreateTicketForm({ categories }: CreateTicketFormProps) {
 
       {/* Subject */}
       <div className="min-w-0 md:col-span-2">
-        <label htmlFor="subject" className="block text-xs font-medium text-gray-900 sm:text-sm">
+        <label htmlFor="subject" className="block text-xs font-medium text-slate-900 sm:text-sm">
           Subject
         </label>
 
@@ -225,7 +225,7 @@ export function CreateTicketForm({ categories }: CreateTicketFormProps) {
           onChange={(event) => setSubject(event.target.value)}
           placeholder="Briefly describe your concern"
           aria-describedby="subject-error"
-          className="mt-2 w-full min-w-0 rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black transition outline-none placeholder:text-gray-400 focus:border-slate-600 sm:text-sm"
+          className="mt-2 w-full min-w-0 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-900 transition outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 sm:text-sm"
         />
 
         <div id="subject-error" aria-live="polite" className="mt-1">
@@ -239,7 +239,7 @@ export function CreateTicketForm({ categories }: CreateTicketFormProps) {
 
       {/* Category */}
       <div className="min-w-0">
-        <label htmlFor="categoryId" className="block text-xs font-medium text-gray-900 sm:text-sm">
+        <label htmlFor="categoryId" className="block text-xs font-medium text-slate-900 sm:text-sm">
           Category
         </label>
 
@@ -278,7 +278,7 @@ export function CreateTicketForm({ categories }: CreateTicketFormProps) {
 
       {/* Priority */}
       <div className="min-w-0">
-        <label htmlFor="priority" className="block text-xs font-medium text-gray-900 sm:text-sm">
+        <label htmlFor="priority" className="block text-xs font-medium text-slate-900 sm:text-sm">
           Priority
         </label>
 
@@ -315,7 +315,10 @@ export function CreateTicketForm({ categories }: CreateTicketFormProps) {
 
       {/* Description */}
       <div className="min-w-0 md:col-span-2">
-        <label htmlFor="description" className="block text-xs font-medium text-gray-900 sm:text-sm">
+        <label
+          htmlFor="description"
+          className="block text-xs font-medium text-slate-900 sm:text-sm"
+        >
           Description
         </label>
 
@@ -330,7 +333,7 @@ export function CreateTicketForm({ categories }: CreateTicketFormProps) {
           onChange={(event) => setDescription(event.target.value)}
           placeholder="Provide the relevant details, steps, and error messages."
           aria-describedby="description-error"
-          className="mt-2 min-h-40 w-full min-w-0 resize-y rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black transition outline-none placeholder:text-gray-400 focus:border-slate-600 sm:min-h-44 sm:text-sm"
+          className="mt-2 min-h-40 w-full min-w-0 resize-y rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-900 transition outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 sm:min-h-44 sm:text-sm"
         />
 
         <div id="description-error" aria-live="polite" className="mt-1">
@@ -355,7 +358,7 @@ export function CreateTicketForm({ categories }: CreateTicketFormProps) {
         <button
           type="submit"
           disabled={pending || categories.length === 0}
-          className="w-full rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto 2xl:px-6 2xl:py-3 2xl:text-base"
+          className="w-full rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto 2xl:px-6 2xl:py-3 2xl:text-base"
         >
           {pending ? "Creating ticket..." : "Create Ticket"}
         </button>

@@ -25,24 +25,24 @@ export function CategoryCard({ category }: CategoryCardProps) {
   const [state, formAction, pending] = useActionState(updateCategoryWithId, initialState);
 
   return (
-    <article className="min-w-0 rounded-xl border bg-white p-4 shadow-sm sm:p-6">
+    <article className="min-w-0 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
       <div className="mb-4 flex flex-col gap-4 sm:mb-5 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-sm font-semibold wrap-break-word text-gray-900 sm:text-base 2xl:text-lg">
+            <h2 className="wrap-break-words text-sm font-semibold text-slate-900 sm:text-base 2xl:text-lg">
               {category.name}
             </h2>
 
             <span
               className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-medium sm:text-xs ${
-                category.isActive ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-600"
+                category.isActive ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-600"
               }`}
             >
               {category.isActive ? "Active" : "Inactive"}
             </span>
           </div>
 
-          <p className="mt-2 text-[11px] leading-5 text-gray-500 sm:text-xs 2xl:text-sm">
+          <p className="mt-2 text-[11px] leading-5 text-slate-500 sm:text-xs 2xl:text-sm">
             Used by {category.ticketCount} {category.ticketCount === 1 ? "ticket" : "tickets"}
           </p>
         </div>
@@ -52,7 +52,11 @@ export function CategoryCard({ category }: CategoryCardProps) {
 
           <button
             type="submit"
-            className="w-full rounded-lg border px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 sm:w-auto"
+            className={`w-full rounded-lg border px-3 py-2 text-sm font-medium transition sm:w-auto ${
+              category.isActive
+                ? "border-slate-300 bg-white text-slate-700 hover:border-slate-400 hover:bg-slate-50"
+                : "border-emerald-200 bg-emerald-50 text-emerald-700 hover:border-emerald-300 hover:bg-emerald-100"
+            }`}
           >
             {category.isActive ? "Deactivate" : "Activate"}
           </button>
@@ -63,7 +67,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
         <div className="min-w-0">
           <label
             htmlFor={`category-name-${category.id}`}
-            className="block text-xs font-medium text-gray-700 sm:text-sm"
+            className="block text-xs font-medium text-slate-700 sm:text-sm"
           >
             Category Name
           </label>
@@ -76,7 +80,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
             minLength={2}
             maxLength={80}
             defaultValue={category.name}
-            className="mt-2 w-full min-w-0 rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black transition outline-none placeholder:text-gray-400 focus:border-slate-700 sm:text-sm"
+            className="mt-2 w-full min-w-0 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-900 transition outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 sm:text-sm"
           />
 
           {state.errors?.name?.map((error) => (
@@ -89,7 +93,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
         <div className="min-w-0">
           <label
             htmlFor={`category-description-${category.id}`}
-            className="block text-xs font-medium text-gray-700 sm:text-sm"
+            className="block text-xs font-medium text-slate-700 sm:text-sm"
           >
             Description
           </label>
@@ -100,7 +104,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
             rows={3}
             maxLength={500}
             defaultValue={category.description ?? ""}
-            className="mt-2 min-h-24 w-full min-w-0 resize-y rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black transition outline-none placeholder:text-gray-400 focus:border-slate-700 sm:text-sm"
+            className="mt-2 min-h-24 w-full min-w-0 resize-y rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-900 transition outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 sm:text-sm"
           />
 
           {state.errors?.description?.map((error) => (
@@ -114,7 +118,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
           <p
             aria-live="polite"
             className={`rounded-lg px-3 py-2.5 text-xs wrap-break-word sm:px-4 sm:py-3 sm:text-sm ${
-              state.success ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
+              state.success ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"
             }`}
           >
             {state.message}
@@ -125,7 +129,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
           <button
             type="submit"
             disabled={pending}
-            className="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
+            className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
           >
             {pending ? "Saving..." : "Save Changes"}
           </button>

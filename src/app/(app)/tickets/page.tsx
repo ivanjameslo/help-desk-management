@@ -13,6 +13,11 @@ import {
   type TicketStatusValue,
 } from "@/lib/validations/ticket-management";
 import { getTicketAccessWhere } from "@/lib/ticket-access";
+import {
+  getTicketPriorityClassName,
+  getTicketPriorityDotClassName,
+  getTicketStatusClassName,
+} from "@/lib/ticket-styles";
 
 const PAGE_SIZE = 10;
 
@@ -298,9 +303,9 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
     <div className="mx-auto max-w-7xl">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl 2xl:text-4xl">Tickets</h1>
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl 2xl:text-4xl">Tickets</h1>
 
-          <p className="mt-1 text-sm text-gray-600 sm:text-base 2xl:text-lg">
+          <p className="mt-1 text-sm text-slate-600 sm:text-base 2xl:text-lg">
             View and manage help desk requests.
           </p>
         </div>
@@ -323,24 +328,24 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
       />
 
       <div className="mt-4 flex flex-col gap-1 sm:mt-6 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
-        <p className="text-xs text-gray-600 sm:text-sm">
+        <p className="text-xs text-slate-600 sm:text-sm">
           Showing {firstResult}–{lastResult} of {totalTickets}{" "}
           {totalTickets === 1 ? "ticket" : "tickets"}
         </p>
 
         {hasActiveFilters && (
-          <p className="text-xs text-gray-500 sm:text-sm">Filters are currently applied.</p>
+          <p className="text-xs text-slate-500 sm:text-sm">Filters are currently applied.</p>
         )}
       </div>
 
       <div className="mt-4">
         {tickets.length === 0 ? (
           <section className="rounded-xl border bg-white p-6 text-center shadow-sm sm:p-8">
-            <h2 className="text-sm font-semibold text-gray-900 sm:text-base">
+            <h2 className="text-sm font-semibold text-slate-900 sm:text-base">
               {hasActiveFilters ? "No matching tickets" : "No tickets available"}
             </h2>
 
-            <p className="mt-2 text-xs text-gray-500 sm:text-sm">
+            <p className="mt-2 text-xs text-slate-500 sm:text-sm">
               {hasActiveFilters
                 ? "Try changing or clearing your filters."
                 : user.role === UserRole.REQUESTER
@@ -361,67 +366,81 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
                     <div className="min-w-0">
                       <Link
                         href={`/tickets/${ticket.id}`}
-                        className="block truncate text-sm font-semibold text-gray-900 transition hover:text-slate-600 sm:text-base"
+                        className="block truncate text-sm font-semibold text-slate-900 transition hover:text-slate-600 sm:text-base"
                       >
                         {ticket.subject}
                       </Link>
 
-                      <p className="mt-1 text-[11px] font-medium text-gray-500 sm:text-xs">
+                      <p className="mt-1 text-[11px] font-medium text-slate-500 sm:text-xs">
                         {ticket.ticketNumber}
                       </p>
                     </div>
 
-                    <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-1 text-[10px] font-medium text-gray-700 sm:text-xs">
+                    <span
+                      className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-medium sm:text-xs ${getTicketStatusClassName(
+                        ticket.status,
+                      )}`}
+                    >
                       {formatEnumLabel(ticket.status)}
                     </span>
                   </div>
 
                   <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3">
                     <div className="min-w-0">
-                      <p className="text-[10px] font-medium tracking-wide text-gray-400 uppercase sm:text-xs">
+                      <p className="text-[10px] font-medium tracking-wide text-slate-400 uppercase sm:text-xs">
                         Category
                       </p>
 
-                      <p className="mt-1 truncate text-xs text-gray-700 sm:text-sm">
+                      <p className="mt-1 truncate text-xs text-slate-700 sm:text-sm">
                         {ticket.category.name}
                       </p>
                     </div>
 
                     <div>
-                      <p className="text-[10px] font-medium tracking-wide text-gray-400 uppercase sm:text-xs">
+                      <p className="text-[10px] font-medium tracking-wide text-slate-400 uppercase sm:text-xs">
                         Priority
                       </p>
 
                       <div className="mt-1">
-                        <span className="inline-flex rounded-full bg-gray-100 px-2.5 py-1 text-[10px] font-medium text-gray-700 sm:text-xs">
+                        <span
+                          className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-medium sm:gap-2 sm:text-xs ${getTicketPriorityClassName(
+                            ticket.priority,
+                          )}`}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className={`h-1.5 w-1.5 shrink-0 rounded-full ${getTicketPriorityDotClassName(
+                              ticket.priority,
+                            )}`}
+                          />
                           {formatEnumLabel(ticket.priority)}
                         </span>
                       </div>
                     </div>
 
                     <div className="min-w-0">
-                      <p className="text-[10px] font-medium tracking-wide text-gray-400 uppercase sm:text-xs">
+                      <p className="text-[10px] font-medium tracking-wide text-slate-400 uppercase sm:text-xs">
                         Requester
                       </p>
 
-                      <p className="mt-1 truncate text-xs text-gray-700 sm:text-sm">
+                      <p className="mt-1 truncate text-xs text-slate-700 sm:text-sm">
                         {ticket.requester.name}
                       </p>
                     </div>
 
                     <div className="min-w-0">
-                      <p className="text-[10px] font-medium tracking-wide text-gray-400 uppercase sm:text-xs">
+                      <p className="text-[10px] font-medium tracking-wide text-slate-400 uppercase sm:text-xs">
                         Assigned Agent
                       </p>
 
-                      <p className="mt-1 truncate text-xs text-gray-700 sm:text-sm">
+                      <p className="mt-1 truncate text-xs text-slate-700 sm:text-sm">
                         {ticket.assignedAgent?.name ?? "Unassigned"}
                       </p>
                     </div>
                   </div>
 
                   <div className="mt-4 flex items-center justify-between border-t pt-3">
-                    <p className="text-[11px] text-gray-500 sm:text-xs">
+                    <p className="text-[11px] text-slate-500 sm:text-xs">
                       Created {formatDate(ticket.createdAt)}
                     </p>
 
@@ -440,7 +459,7 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
             <div className="hidden overflow-hidden rounded-xl border bg-white shadow-sm lg:block">
               <div className="overflow-x-auto">
                 <table className="w-full min-w-225 text-left text-sm 2xl:text-base">
-                  <thead className="border-b bg-gray-50 text-xs tracking-wide text-gray-500 uppercase 2xl:text-sm">
+                  <thead className="border-b bg-slate-50 text-xs tracking-wide text-slate-500 uppercase 2xl:text-sm">
                     <tr>
                       <th className="px-5 py-4 2xl:px-6">Ticket</th>
 
@@ -450,7 +469,7 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
 
                       <th className="px-5 py-4 2xl:px-6">Priority</th>
 
-                      <th className="px-5 py-4 2xl:px-6">Status</th>
+                      <th className="min-w-32 px-5 py-4 2xl:px-6">Status</th>
 
                       <th className="px-5 py-4 2xl:px-6">Assigned Agent</th>
 
@@ -460,44 +479,58 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
 
                   <tbody className="divide-y">
                     {tickets.map((ticket) => (
-                      <tr key={ticket.id} className="transition hover:bg-gray-50">
+                      <tr key={ticket.id} className="transition hover:bg-slate-50">
                         <td className="px-5 py-4 2xl:px-6 2xl:py-5">
                           <Link href={`/tickets/${ticket.id}`} className="group block">
-                            <p className="font-medium text-gray-900 transition group-hover:text-slate-600">
+                            <p className="font-medium text-slate-900 transition group-hover:text-slate-600">
                               {ticket.subject}
                             </p>
 
-                            <p className="mt-1 text-xs text-gray-500 2xl:text-sm">
+                            <p className="mt-1 text-xs text-slate-500 2xl:text-sm">
                               {ticket.ticketNumber}
                             </p>
                           </Link>
                         </td>
 
-                        <td className="px-5 py-4 text-gray-600 2xl:px-6 2xl:py-5">
+                        <td className="px-5 py-4 text-slate-600 2xl:px-6 2xl:py-5">
                           {ticket.category.name}
                         </td>
 
-                        <td className="px-5 py-4 text-gray-600 2xl:px-6 2xl:py-5">
+                        <td className="px-5 py-4 text-slate-600 2xl:px-6 2xl:py-5">
                           {ticket.requester.name}
                         </td>
 
                         <td className="px-5 py-4 2xl:px-6 2xl:py-5">
-                          <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 2xl:text-sm">
+                          <span
+                            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap 2xl:text-sm ${getTicketPriorityClassName(
+                              ticket.priority,
+                            )}`}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={`h-1.5 w-1.5 shrink-0 rounded-full ${getTicketPriorityDotClassName(
+                                ticket.priority,
+                              )}`}
+                            />
                             {formatEnumLabel(ticket.priority)}
                           </span>
                         </td>
 
                         <td className="px-5 py-4 2xl:px-6 2xl:py-5">
-                          <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 2xl:text-sm">
+                          <span
+                            className={`inline-flex rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap 2xl:text-sm ${getTicketStatusClassName(
+                              ticket.status,
+                            )}`}
+                          >
                             {formatEnumLabel(ticket.status)}
                           </span>
                         </td>
 
-                        <td className="px-5 py-4 text-gray-600 2xl:px-6 2xl:py-5">
+                        <td className="px-5 py-4 text-slate-600 2xl:px-6 2xl:py-5">
                           {ticket.assignedAgent?.name ?? "Unassigned"}
                         </td>
 
-                        <td className="px-5 py-4 whitespace-nowrap text-gray-600 2xl:px-6 2xl:py-5">
+                        <td className="px-5 py-4 whitespace-nowrap text-slate-600 2xl:px-6 2xl:py-5">
                           {formatDate(ticket.createdAt)}
                         </td>
                       </tr>
@@ -515,7 +548,7 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
           aria-label="Ticket pagination"
           className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
         >
-          <p className="text-center text-xs text-gray-500 sm:text-left sm:text-sm">
+          <p className="text-center text-xs text-slate-500 sm:text-left sm:text-sm">
             Page {currentPage} of {totalPages}
           </p>
 
@@ -523,12 +556,12 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
             {currentPage > 1 ? (
               <Link
                 href={buildTicketsHref(filters, currentPage - 1)}
-                className="rounded-lg border px-3 py-2 text-center text-xs font-medium text-gray-700 transition hover:bg-gray-100 sm:px-4 sm:text-sm"
+                className="rounded-lg border px-3 py-2 text-center text-xs font-medium text-slate-700 transition hover:bg-slate-100 sm:px-4 sm:text-sm"
               >
                 Previous
               </Link>
             ) : (
-              <span className="cursor-not-allowed rounded-lg border px-3 py-2 text-center text-xs font-medium text-gray-400 sm:px-4 sm:text-sm">
+              <span className="cursor-not-allowed rounded-lg border px-3 py-2 text-center text-xs font-medium text-slate-400 sm:px-4 sm:text-sm">
                 Previous
               </span>
             )}
@@ -536,12 +569,12 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
             {currentPage < totalPages ? (
               <Link
                 href={buildTicketsHref(filters, currentPage + 1)}
-                className="rounded-lg border px-3 py-2 text-center text-xs font-medium text-gray-700 transition hover:bg-gray-100 sm:px-4 sm:text-sm"
+                className="rounded-lg border px-3 py-2 text-center text-xs font-medium text-slate-700 transition hover:bg-slate-100 sm:px-4 sm:text-sm"
               >
                 Next
               </Link>
             ) : (
-              <span className="cursor-not-allowed rounded-lg border px-3 py-2 text-center text-xs font-medium text-gray-400 sm:px-4 sm:text-sm">
+              <span className="cursor-not-allowed rounded-lg border px-3 py-2 text-center text-xs font-medium text-slate-400 sm:px-4 sm:text-sm">
                 Next
               </span>
             )}

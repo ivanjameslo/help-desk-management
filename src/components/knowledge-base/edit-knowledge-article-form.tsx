@@ -33,12 +33,15 @@ export function EditKnowledgeArticleForm({ article, categories }: EditKnowledgeA
   const [state, formAction, pending] = useActionState(updateArticleWithId, initialState);
 
   return (
-    <form action={formAction} className="rounded-xl border bg-white p-4 shadow-sm sm:p-6">
+    <form
+      action={formAction}
+      className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6"
+    >
       {/* Title */}
       <div>
         <label
           htmlFor="kb-edit-title"
-          className="block text-xs font-medium text-gray-700 sm:text-sm"
+          className="block text-xs font-medium text-slate-700 sm:text-sm"
         >
           Title
         </label>
@@ -51,7 +54,7 @@ export function EditKnowledgeArticleForm({ article, categories }: EditKnowledgeA
           minLength={5}
           maxLength={160}
           defaultValue={article.title}
-          className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black transition outline-none focus:border-slate-700 sm:text-sm"
+          className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-900 transition outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 sm:text-sm"
         />
 
         {state.errors?.title?.map((error) => (
@@ -65,7 +68,7 @@ export function EditKnowledgeArticleForm({ article, categories }: EditKnowledgeA
       <div className="mt-5">
         <label
           htmlFor="kb-edit-category"
-          className="block text-xs font-medium text-gray-700 sm:text-sm"
+          className="block text-xs font-medium text-slate-700 sm:text-sm"
         >
           Category
         </label>
@@ -74,7 +77,7 @@ export function EditKnowledgeArticleForm({ article, categories }: EditKnowledgeA
           id="kb-edit-category"
           name="categoryId"
           defaultValue={article.categoryId ?? ""}
-          className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-xs text-black transition outline-none focus:border-slate-700 sm:text-sm"
+          className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-900 transition outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 sm:text-sm"
         >
           <option value="">General</option>
 
@@ -96,7 +99,7 @@ export function EditKnowledgeArticleForm({ article, categories }: EditKnowledgeA
       <div className="mt-5">
         <label
           htmlFor="kb-edit-summary"
-          className="block text-xs font-medium text-gray-700 sm:text-sm"
+          className="block text-xs font-medium text-slate-700 sm:text-sm"
         >
           Summary
         </label>
@@ -107,7 +110,7 @@ export function EditKnowledgeArticleForm({ article, categories }: EditKnowledgeA
           rows={3}
           maxLength={300}
           defaultValue={article.summary ?? ""}
-          className="mt-2 min-h-20 w-full resize-y rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black transition outline-none focus:border-slate-700 sm:text-sm"
+          className="mt-2 min-h-20 w-full resize-y rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-900 transition outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 sm:text-sm"
         />
 
         {state.errors?.summary?.map((error) => (
@@ -121,7 +124,7 @@ export function EditKnowledgeArticleForm({ article, categories }: EditKnowledgeA
       <div className="mt-5">
         <label
           htmlFor="kb-edit-content"
-          className="block text-xs font-medium text-gray-700 sm:text-sm"
+          className="block text-xs font-medium text-slate-700 sm:text-sm"
         >
           Article Content
         </label>
@@ -134,7 +137,7 @@ export function EditKnowledgeArticleForm({ article, categories }: EditKnowledgeA
           minLength={20}
           maxLength={20000}
           defaultValue={article.content}
-          className="mt-2 min-h-80 w-full resize-y rounded-lg border border-gray-300 px-3 py-2.5 text-xs leading-5 text-black transition outline-none focus:border-slate-700 sm:text-sm sm:leading-6"
+          className="mt-2 min-h-80 w-full resize-y rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-xs leading-5 text-slate-900 transition outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 sm:text-sm sm:leading-6"
         />
 
         {state.errors?.content?.map((error) => (
@@ -145,18 +148,18 @@ export function EditKnowledgeArticleForm({ article, categories }: EditKnowledgeA
       </div>
 
       {/* Publication status */}
-      <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-lg border bg-gray-50 p-3 sm:p-4">
+      <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-lg border border-emerald-100 bg-emerald-50/60 p-3 sm:p-4">
         <input
           type="checkbox"
           name="isPublished"
           defaultChecked={article.isPublished}
-          className="mt-0.5 size-4 shrink-0 rounded border-gray-300"
+          className="mt-0.5 size-4 shrink-0 rounded border-slate-300 accent-emerald-600"
         />
 
         <span>
-          <span className="block text-xs font-medium text-gray-900 sm:text-sm">Published</span>
+          <span className="block text-xs font-medium text-emerald-900 sm:text-sm">Published</span>
 
-          <span className="mt-1 block text-[11px] leading-5 text-gray-500 sm:text-xs">
+          <span className="mt-1 block text-[11px] leading-5 text-emerald-700 sm:text-xs">
             Published articles are visible to users and can be used by the AI assistant.
           </span>
         </span>
@@ -166,7 +169,7 @@ export function EditKnowledgeArticleForm({ article, categories }: EditKnowledgeA
         <p
           aria-live="polite"
           className={`mt-5 rounded-lg px-3 py-2.5 text-xs sm:text-sm ${
-            state.success ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
+            state.success ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"
           }`}
         >
           {state.message}
@@ -176,7 +179,7 @@ export function EditKnowledgeArticleForm({ article, categories }: EditKnowledgeA
       <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <Link
           href="/admin/knowledge-base"
-          className="rounded-lg border px-5 py-2.5 text-center text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+          className="rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
         >
           Cancel
         </Link>
@@ -184,7 +187,7 @@ export function EditKnowledgeArticleForm({ article, categories }: EditKnowledgeA
         <button
           type="submit"
           disabled={pending}
-          className="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending ? "Saving changes..." : "Save Changes"}
         </button>

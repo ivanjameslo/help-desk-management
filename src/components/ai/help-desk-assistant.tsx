@@ -145,7 +145,7 @@ export function HelpDeskAssistant() {
           type="button"
           onClick={() => setIsOpen(true)}
           aria-label="Open Help Desk Assistant"
-          className="fixed right-4 bottom-4 z-50 flex size-14 items-center justify-center rounded-full bg-slate-900 text-white shadow-lg transition hover:bg-slate-700 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:outline-none sm:right-6 sm:bottom-6 sm:size-15"
+          className="fixed right-4 bottom-4 z-50 flex size-14 items-center justify-center rounded-full border border-cyan-400/30 bg-slate-900 text-white shadow-lg shadow-blue-900/15 transition hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-xl focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none sm:right-6 sm:bottom-6 sm:size-15"
         >
           <svg
             aria-hidden="true"
@@ -168,22 +168,22 @@ export function HelpDeskAssistant() {
       {isOpen && (
         <section
           aria-label="Help Desk Assistant"
-          className="fixed right-4 bottom-4 z-50 flex h-[min(620px,calc(100dvh-2rem))] w-[calc(100vw-2rem)] max-w-95 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl sm:right-6 sm:bottom-6 sm:h-150"
+          className="fixed right-4 bottom-4 z-50 flex h-[min(620px,calc(100dvh-2rem))] w-[calc(100vw-2rem)] max-w-95 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/10 sm:right-6 sm:bottom-6 sm:h-150"
         >
           {/* Header */}
-          <header className="flex shrink-0 items-center justify-between border-b border-gray-200 px-4 py-3">
+          <header className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-linear-to-r from-cyan-50 to-blue-50 px-4 py-3">
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-slate-900 text-white">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-cyan-500 to-blue-600 text-white shadow-sm">
                   <span className="text-sm">✦</span>
                 </div>
 
                 <div className="min-w-0">
-                  <h2 className="truncate text-sm font-semibold text-gray-900">
+                  <h2 className="truncate text-sm font-semibold text-slate-900">
                     Help Desk Assistant
                   </h2>
 
-                  <p className="text-[11px] text-gray-500">AI-powered support</p>
+                  <p className="text-[11px] text-slate-500">AI-powered support</p>
                 </div>
               </div>
             </div>
@@ -192,7 +192,7 @@ export function HelpDeskAssistant() {
               type="button"
               onClick={() => setIsOpen(false)}
               aria-label="Close Help Desk Assistant"
-              className="flex size-9 shrink-0 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100 hover:text-gray-900"
+              className="flex size-9 shrink-0 items-center justify-center rounded-lg text-slate-500 transition hover:bg-white/70 hover:text-slate-900"
             >
               <svg
                 aria-hidden="true"
@@ -218,8 +218,8 @@ export function HelpDeskAssistant() {
                   <div
                     className={
                       message.role === "user"
-                        ? "max-w-[85%] rounded-2xl rounded-br-md bg-slate-900 px-3.5 py-2.5 text-xs leading-5 text-white sm:text-sm"
-                        : "max-w-[85%] rounded-2xl rounded-bl-md bg-gray-100 px-3.5 py-2.5 text-xs leading-5 text-gray-700 sm:text-sm"
+                        ? "max-w-[85%] rounded-2xl rounded-br-md bg-blue-600 px-3.5 py-2.5 text-xs leading-5 text-white shadow-sm sm:text-sm"
+                        : "max-w-[85%] rounded-2xl rounded-bl-md border border-cyan-100 bg-cyan-50/50 px-3.5 py-2.5 text-xs leading-5 text-slate-700 sm:text-sm"
                     }
                   >
                     <p className="wrap-break-word whitespace-pre-wrap">{message.content}</p>
@@ -227,7 +227,7 @@ export function HelpDeskAssistant() {
                       <button
                         type="button"
                         onClick={() => insertReply(message.content)}
-                        className="mt-3 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-900 transition hover:bg-slate-50 sm:text-sm"
+                        className="mt-3 w-full rounded-lg border border-blue-200 bg-white px-3 py-2 text-xs font-medium text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 sm:text-sm"
                       >
                         Insert into Reply Box
                       </button>
@@ -238,11 +238,11 @@ export function HelpDeskAssistant() {
 
               {pending && (
                 <div className="flex justify-start">
-                  <div className="rounded-2xl rounded-bl-md bg-gray-100 px-4 py-3">
+                  <div className="rounded-2xl rounded-bl-md border border-cyan-100 bg-cyan-50/50 px-4 py-3">
                     <div className="flex gap-1">
-                      <span className="size-1.5 rounded-full bg-gray-400" />
-                      <span className="size-1.5 rounded-full bg-gray-400" />
-                      <span className="size-1.5 rounded-full bg-gray-400" />
+                      <span className="size-1.5 animate-pulse rounded-full bg-cyan-500" />
+                      <span className="size-1.5 animate-pulse rounded-full bg-blue-500" />
+                      <span className="size-1.5 animate-pulse rounded-full bg-cyan-500" />
                     </div>
                   </div>
                 </div>
@@ -253,7 +253,7 @@ export function HelpDeskAssistant() {
           </div>
 
           {/* Input */}
-          <form onSubmit={handleSubmit} className="shrink-0 border-t border-gray-200 bg-white p-3">
+          <form onSubmit={handleSubmit} className="shrink-0 border-t border-slate-200 bg-white p-3">
             <div className="flex items-end gap-2">
               <textarea
                 value={input}
@@ -261,14 +261,14 @@ export function HelpDeskAssistant() {
                 rows={1}
                 maxLength={2000}
                 placeholder="Ask about your help desk..."
-                className="max-h-32 min-h-10 flex-1 resize-none rounded-xl border border-gray-300 px-3 py-2.5 text-xs text-black transition outline-none placeholder:text-gray-400 focus:border-slate-600 sm:text-sm"
+                className="max-h-32 min-h-10 flex-1 resize-none rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-900 transition outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 sm:text-sm"
               />
 
               <button
                 type="submit"
                 disabled={pending || !input.trim()}
                 aria-label="Send message"
-                className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <svg
                   aria-hidden="true"
@@ -283,7 +283,7 @@ export function HelpDeskAssistant() {
               </button>
             </div>
 
-            <p className="mt-2 text-center text-[10px] leading-4 text-gray-400">
+            <p className="mt-2 text-center text-[10px] leading-4 text-slate-400">
               AI responses may be inaccurate. Review important information before acting.
             </p>
           </form>

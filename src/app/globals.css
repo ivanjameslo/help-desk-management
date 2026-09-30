@@ -24,3 +24,40 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes float-blue {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-40px, 30px) scale(1.08);
+  }
+}
+
+@keyframes float-cyan {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(45px, -30px) scale(1.1);
+  }
+}
+
+.login-glow-blue {
+  animation: float-blue 14s ease-in-out infinite;
+}
+
+.login-glow-cyan {
+  animation: float-cyan 18s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-glow-blue,
+  .login-glow-cyan {
+    animation: none;
+  }
+}

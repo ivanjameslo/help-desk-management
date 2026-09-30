@@ -53,17 +53,17 @@ export default async function EditKnowledgeArticlePage({ params }: EditKnowledge
     <div className="mx-auto w-full max-w-4xl">
       <Link
         href="/admin/knowledge-base"
-        className="text-sm font-medium text-slate-700 transition hover:text-slate-500"
+        className="text-sm font-medium text-blue-600 transition hover:text-blue-700"
       >
         ← Back to Manage Knowledge Base
       </Link>
 
       <div className="mt-6">
-        <h1 className="text-2xl font-bold wrap-break-word text-gray-900 sm:text-3xl 2xl:text-4xl">
+        <h1 className="text-2xl font-bold wrap-break-word text-slate-900 sm:text-3xl 2xl:text-4xl">
           Edit Article
         </h1>
 
-        <p className="mt-1 text-sm text-gray-600 sm:text-base">
+        <p className="mt-1 text-sm text-slate-600 sm:text-base">
           Update the article content, category, and publication status.
         </p>
       </div>

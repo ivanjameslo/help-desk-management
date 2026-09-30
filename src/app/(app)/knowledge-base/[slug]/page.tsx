@@ -50,36 +50,41 @@ export default async function KnowledgeArticlePage({ params }: KnowledgeArticleP
     <div className="mx-auto w-full max-w-4xl">
       <Link
         href="/knowledge-base"
-        className="text-sm font-medium text-slate-700 transition hover:text-slate-500"
+        className="text-sm font-medium text-blue-600 transition hover:text-blue-700"
       >
         ← Back to Knowledge Base
       </Link>
 
-      <article className="mt-6 rounded-xl border bg-white p-5 shadow-sm sm:p-8">
+      <article className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-gray-100 px-2.5 py-1 text-[10px] font-medium text-gray-600 sm:text-xs">
+          <span className="rounded-full bg-cyan-50 px-2.5 py-1 text-[10px] font-medium text-cyan-700 sm:text-xs">
             {article.category?.name ?? "General"}
           </span>
         </div>
 
-        <h1 className="mt-4 text-2xl font-bold wrap-break-word text-gray-900 sm:text-3xl">
+        <h1 className="mt-4 text-2xl font-bold wrap-break-word text-slate-900 sm:text-3xl">
           {article.title}
         </h1>
 
         {article.summary && (
-          <p className="mt-3 text-sm leading-6 wrap-break-word text-gray-600 sm:text-base">
+          <p className="mt-3 text-sm leading-6 wrap-break-word text-slate-600 sm:text-base sm:leading-7">
             {article.summary}
           </p>
         )}
 
-        <div className="mt-5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
-          <span>Created by {article.createdBy.name}</span>
+        <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-400">
+          <span>
+            Created by <span className="font-medium text-slate-600">{article.createdBy.name}</span>
+          </span>
 
-          <span>Updated {formatDate(article.updatedAt)}</span>
+          <span>
+            Updated{" "}
+            <span className="font-medium text-slate-600">{formatDate(article.updatedAt)}</span>
+          </span>
         </div>
 
-        <div className="mt-8 border-t pt-6">
-          <div className="text-sm leading-7 wrap-break-word whitespace-pre-wrap text-gray-700 sm:text-base">
+        <div className="mt-8 border-t border-slate-200 pt-6">
+          <div className="text-sm leading-7 wrap-break-word whitespace-pre-wrap text-slate-700 sm:text-base sm:leading-8">
             {article.content}
           </div>
         </div>

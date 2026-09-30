@@ -36,7 +36,7 @@ function SelectChevron() {
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
-      className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-gray-600"
+      className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-slate-600"
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
     </svg>
@@ -44,7 +44,7 @@ function SelectChevron() {
 }
 
 const selectClassName =
-  "w-full appearance-none rounded-lg border border-gray-300 bg-white py-2 pl-3 pr-11 text-sm text-black outline-none transition focus:border-slate-700";
+  "w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-11 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10";
 
 export function TicketFilters({
   currentFilters,
@@ -56,12 +56,12 @@ export function TicketFilters({
     <form
       action="/tickets"
       method="get"
-      className="mt-6 rounded-xl border bg-white p-4 shadow-sm sm:mt-8 sm:p-5"
+      className="mt-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:mt-8 sm:p-5"
     >
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
         {/* Search */}
         <div className="md:col-span-2">
-          <label htmlFor="ticket-search" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="ticket-search" className="block text-sm font-medium text-slate-700">
             Search
           </label>
 
@@ -72,13 +72,13 @@ export function TicketFilters({
             defaultValue={currentFilters.query}
             maxLength={100}
             placeholder="Ticket number or subject"
-            className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-black transition outline-none focus:border-slate-700"
+            className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 transition outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10"
           />
         </div>
 
         {/* Status */}
         <div>
-          <label htmlFor="ticket-status" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="ticket-status" className="block text-sm font-medium text-slate-700">
             Status
           </label>
 
@@ -104,7 +104,7 @@ export function TicketFilters({
 
         {/* Priority */}
         <div>
-          <label htmlFor="ticket-priority" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="ticket-priority" className="block text-sm font-medium text-slate-700">
             Priority
           </label>
 
@@ -130,7 +130,7 @@ export function TicketFilters({
 
         {/* Category */}
         <div>
-          <label htmlFor="ticket-category" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="ticket-category" className="block text-sm font-medium text-slate-700">
             Category
           </label>
 
@@ -157,7 +157,7 @@ export function TicketFilters({
 
         {/* Sort */}
         <div>
-          <label htmlFor="ticket-sort" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="ticket-sort" className="block text-sm font-medium text-slate-700">
             Sort
           </label>
 
@@ -183,7 +183,7 @@ export function TicketFilters({
       {/* Assigned Agent */}
       {showAgentFilter && (
         <div className="mt-4 w-full sm:max-w-sm">
-          <label htmlFor="assigned-agent" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="assigned-agent" className="block text-sm font-medium text-slate-700">
             Assigned Agent
           </label>
 
@@ -215,14 +215,14 @@ export function TicketFilters({
       <div className="mt-5 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-end">
         <Link
           href="/tickets"
-          className="rounded-lg border px-4 py-2 text-center text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+          className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-center text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
         >
           Clear Filters
         </Link>
 
         <button
           type="submit"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
+          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
         >
           Apply Filters
         </button>

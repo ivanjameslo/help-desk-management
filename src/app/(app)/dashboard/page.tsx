@@ -8,6 +8,11 @@ import { requireUser } from "@/lib/auth-guards";
 import { formatDateTime, formatEnumLabel } from "@/lib/formatters";
 import { prisma } from "@/lib/prisma";
 import { getTicketAccessWhere, getTicketActivityAccessWhere } from "@/lib/ticket-access";
+import {
+  getTicketPriorityClassName,
+  getTicketPriorityDotClassName,
+  getTicketStatusClassName,
+} from "@/lib/ticket-styles";
 
 const ACTIVE_STATUSES: TicketStatus[] = [
   TicketStatus.OPEN,
@@ -277,16 +282,16 @@ export default async function DashboardPage() {
       {/* Page heading */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl 2xl:text-4xl">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl 2xl:text-4xl">Dashboard</h1>
 
-          <p className="mt-1 text-sm text-gray-600 sm:text-base 2xl:text-lg">
+          <p className="mt-1 text-sm text-slate-600 sm:text-base 2xl:text-lg">
             Welcome back, {user.name}.
           </p>
         </div>
 
         <Link
           href={isRequester ? "/tickets/new" : "/tickets"}
-          className="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-center text-sm font-medium text-white transition hover:bg-slate-700 sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
+          className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-center text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
         >
           {isRequester ? "Create Ticket" : "View All Tickets"}
         </Link>
@@ -322,15 +327,15 @@ export default async function DashboardPage() {
       {/* Recent tickets and activities */}
       <div className="mt-4 grid items-start gap-4 sm:mt-6 sm:gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.8fr)]">
         {/* Recent tickets */}
-        <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-          <div className="flex items-center justify-between gap-4 border-b px-4 py-4 sm:px-6 sm:py-5">
-            <h2 className="text-base font-semibold text-gray-900 sm:text-lg 2xl:text-xl">
+        <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <div className="flex items-center justify-between gap-4 border-b border-slate-200 px-4 py-4 sm:px-6 sm:py-5">
+            <h2 className="text-base font-semibold text-slate-900 sm:text-lg 2xl:text-xl">
               Recent Tickets
             </h2>
 
             <Link
               href="/tickets"
-              className="text-sm font-medium text-slate-700 transition hover:text-slate-500"
+              className="text-sm font-medium text-blue-600 transition hover:text-blue-700"
             >
               View all
             </Link>
@@ -338,43 +343,60 @@ export default async function DashboardPage() {
 
           {recentTickets.length === 0 ? (
             <div className="p-6">
-              <p className="text-sm text-gray-500">No tickets are available yet.</p>
+              <p className="text-sm text-slate-500">No tickets are available yet.</p>
             </div>
           ) : (
-            <div className="divide-y">
+            <div className="divide-y divide-slate-200">
               {recentTickets.map((ticket) => (
                 <article
                   key={ticket.id}
-                  className="flex flex-wrap items-start justify-between gap-3 px-4 py-4 transition hover:bg-gray-50 sm:gap-4 sm:px-6 sm:py-5"
+                  className="flex flex-wrap items-start justify-between gap-3 px-4 py-4 transition hover:bg-slate-50 sm:gap-4 sm:px-6 sm:py-5"
                 >
                   <div className="min-w-0">
                     <Link
                       href={`/tickets/${ticket.id}`}
-                      className="font-semibold text-gray-900 transition hover:text-slate-600"
+                      className="font-semibold text-slate-900 transition hover:text-blue-600"
                     >
                       {ticket.subject}
                     </Link>
 
-                    <p className="mt-1 text-xs font-medium text-gray-500">{ticket.ticketNumber}</p>
+                    <p className="mt-1 text-xs font-medium text-slate-500">{ticket.ticketNumber}</p>
 
-                    <p className="mt-3 text-sm text-gray-600">
-                      {ticket.category.name}
-                      {" · "}
-                      {formatEnumLabel(ticket.priority)} priority
-                    </p>
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                      <span className="text-sm text-slate-600">{ticket.category.name}</span>
 
-                    <p className="mt-1 text-xs text-gray-500">
+                      <span
+                        className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${getTicketPriorityClassName(
+                          ticket.priority,
+                        )}`}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={`h-1.5 w-1.5 rounded-full ${getTicketPriorityDotClassName(
+                            ticket.priority,
+                          )}`}
+                        />
+
+                        {formatEnumLabel(ticket.priority)}
+                      </span>
+                    </div>
+
+                    <p className="mt-1 text-xs text-slate-500">
                       {isRequester
                         ? `Assigned to ${ticket.assignedAgent?.name ?? "No agent yet"}`
                         : `Requested by ${ticket.requester.name}`}
                     </p>
 
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-slate-500">
                       Updated {formatDateTime(ticket.updatedAt)}
                     </p>
                   </div>
 
-                  <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-medium ${getTicketStatusClassName(
+                      ticket.status,
+                    )}`}
+                  >
                     {formatEnumLabel(ticket.status)}
                   </span>
                 </article>
@@ -384,36 +406,39 @@ export default async function DashboardPage() {
         </section>
 
         {/* Recent activity */}
-        <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-          <div className="border-b px-4 py-4 sm:px-6 sm:py-5">
-            <h2 className="text-base font-semibold text-gray-900 sm:text-lg 2xl:text-xl">
+        <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <div className="border-b border-slate-200 px-4 py-4 sm:px-6 sm:py-5">
+            <h2 className="text-base font-semibold text-slate-900 sm:text-lg 2xl:text-xl">
               Recent Activity
             </h2>
           </div>
 
           {recentActivities.length === 0 ? (
             <div className="p-4 sm:p-6">
-              <p className="text-xs text-gray-500 sm:text-sm">
+              <p className="text-xs text-slate-500 sm:text-sm">
                 No ticket activity has been recorded yet.
               </p>
             </div>
           ) : (
-            <ol className="divide-y">
+            <ol className="divide- divide-slate-200">
               {recentActivities.map((activity) => (
-                <li key={activity.id} className="px-4 py-4 sm:px-6 sm:py-5">
+                <li
+                  key={activity.id}
+                  className="px-4 py-4 transition hover:bg-slate-50 sm:px-6 sm:py-5"
+                >
                   <Link
                     href={`/tickets/${activity.ticket.id}`}
-                    className="text-xs font-medium text-gray-900 transition hover:text-slate-600 sm:text-sm"
+                    className="text-xs font-medium text-blue-600 transition hover:text-blue-700 sm:text-sm"
                   >
                     {activity.ticket.ticketNumber}
                   </Link>
 
-                  <p className="mt-2 text-xs leading-5 text-gray-600 sm:text-sm sm:leading-6">
+                  <p className="mt-2 text-xs leading-5 text-slate-600 sm:text-sm sm:leading-6">
                     {activity.description}
                   </p>
 
                   <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <p className="text-[11px] text-gray-500 sm:text-xs">
+                    <p className="text-[11px] text-slate-500 sm:text-xs">
                       {formatDateTime(activity.createdAt)}
                     </p>
 

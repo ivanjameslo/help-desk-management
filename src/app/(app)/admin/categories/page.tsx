@@ -34,11 +34,11 @@ export default async function CategoriesPage() {
   return (
     <div className="mx-auto w-full max-w-7xl min-w-0">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl 2xl:text-4xl">
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl 2xl:text-4xl">
           Manage Categories
         </h1>
 
-        <p className="mt-1 text-sm leading-6 text-gray-600 sm:text-base 2xl:text-lg">
+        <p className="mt-1 text-sm leading-6 text-slate-600 sm:text-base 2xl:text-lg">
           Create and maintain the categories used for help desk tickets.
         </p>
       </div>
@@ -50,16 +50,16 @@ export default async function CategoriesPage() {
 
         <section className="min-w-0">
           <div className="mb-3 flex items-center justify-between gap-3 sm:mb-4 sm:gap-4">
-            <h2 className="min-w-0 text-base font-semibold text-gray-900 sm:text-lg 2xl:text-xl">
+            <h2 className="min-w-0 text-base font-semibold text-slate-900 sm:text-lg 2xl:text-xl">
               Existing Categories
             </h2>
 
-            <p className="shrink-0 text-xs text-gray-500 sm:text-sm">{categories.length} total</p>
+            <p className="shrink-0 text-xs text-slate-500 sm:text-sm">{categories.length} total</p>
           </div>
 
           {categories.length === 0 ? (
             <div className="rounded-xl border bg-white p-5 text-center shadow-sm sm:p-8">
-              <p className="text-xs leading-5 text-gray-500 sm:text-sm sm:leading-6">
+              <p className="text-xs leading-5 text-slate-500 sm:text-sm sm:leading-6">
                 No categories have been created yet.
               </p>
             </div>

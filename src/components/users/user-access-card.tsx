@@ -28,7 +28,7 @@ type UserAccessCardProps = {
 const initialState: UpdateUserAccessState = {};
 
 const selectClassName =
-  "w-full appearance-none rounded-lg border border-gray-300 bg-white py-2.5 pl-3 pr-12 text-xs text-black outline-none transition focus:border-slate-700 sm:text-sm 2xl:text-base";
+  "w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3 pr-12 text-xs text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 sm:text-sm 2xl:text-base";
 
 function SelectChevron() {
   return (
@@ -38,7 +38,7 @@ function SelectChevron() {
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
-      className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-gray-700"
+      className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-slate-700"
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
     </svg>
@@ -53,11 +53,11 @@ export function UserAccessCard({ user, currentUserId }: UserAccessCardProps) {
   const isCurrentUser = user.id === currentUserId;
 
   return (
-    <article className="min-w-0 rounded-xl border bg-white p-4 shadow-sm sm:p-6">
+    <article className="min-w-0 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-sm font-semibold wrap-break-word text-gray-900 sm:text-base 2xl:text-lg">
+            <h2 className="wrap-break-words text-sm font-semibold text-slate-900 sm:text-base 2xl:text-lg">
               {user.name}
             </h2>
 
@@ -75,23 +75,23 @@ export function UserAccessCard({ user, currentUserId }: UserAccessCardProps) {
 
             <span
               className={`rounded-full px-2.5 py-1 text-[10px] font-medium sm:text-xs ${
-                user.isActive ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-600"
+                user.isActive ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-600"
               }`}
             >
               {user.isActive ? "Active" : "Inactive"}
             </span>
           </div>
 
-          <p className="mt-2 text-xs break-all text-gray-600 sm:text-sm 2xl:text-base">
+          <p className="mt-2 text-xs break-all text-slate-600 sm:text-sm 2xl:text-base">
             {user.email}
           </p>
 
-          <p className="mt-2 text-[11px] text-gray-500 sm:text-xs 2xl:text-sm">
+          <p className="mt-2 text-[11px] text-slate-500 sm:text-xs 2xl:text-sm">
             Created {user.createdAtLabel}
           </p>
         </div>
 
-        <div className="shrink-0 text-left text-[11px] text-gray-500 sm:text-right sm:text-xs 2xl:text-sm">
+        <div className="shrink-0 text-left text-[11px] text-slate-500 sm:text-right sm:text-xs 2xl:text-sm">
           <p>
             {user.requestedTicketCount} requested{" "}
             {user.requestedTicketCount === 1 ? "ticket" : "tickets"}
@@ -108,7 +108,7 @@ export function UserAccessCard({ user, currentUserId }: UserAccessCardProps) {
         <div className="min-w-0">
           <label
             htmlFor={`user-role-${user.id}`}
-            className="block text-xs font-medium text-gray-700 sm:text-sm 2xl:text-base"
+            className="block text-xs font-medium text-slate-700 sm:text-sm 2xl:text-base"
           >
             Role
           </label>
@@ -140,7 +140,7 @@ export function UserAccessCard({ user, currentUserId }: UserAccessCardProps) {
         <div className="min-w-0">
           <label
             htmlFor={`user-status-${user.id}`}
-            className="block text-xs font-medium text-gray-700 sm:text-sm 2xl:text-base"
+            className="block text-xs font-medium text-slate-700 sm:text-sm 2xl:text-base"
           >
             Account Status
           </label>
@@ -170,7 +170,7 @@ export function UserAccessCard({ user, currentUserId }: UserAccessCardProps) {
           <p
             aria-live="polite"
             className={`rounded-lg px-3 py-2.5 text-xs sm:px-4 sm:py-3 sm:text-sm md:col-span-2 ${
-              state.success ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
+              state.success ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"
             }`}
           >
             {state.message}
@@ -181,7 +181,7 @@ export function UserAccessCard({ user, currentUserId }: UserAccessCardProps) {
           <button
             type="submit"
             disabled={pending}
-            className="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
+            className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
           >
             {pending ? "Saving..." : "Save Access"}
           </button>

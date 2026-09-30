@@ -76,12 +76,12 @@ export function TicketCommentForm({ ticketId, canCreateInternalNote }: TicketCom
     <form
       ref={formRef}
       action={formAction}
-      className="min-w-0 rounded-xl border bg-white p-4 shadow-sm sm:p-6"
+      className="min-w-0 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6"
     >
-      <h2 className="text-base font-semibold text-gray-900 sm:text-lg 2xl:text-xl">Add a Reply</h2>
+      <h2 className="text-base font-semibold text-slate-900 sm:text-lg 2xl:text-xl">Add a Reply</h2>
 
       <div className="mt-4 sm:mt-5">
-        <label htmlFor="content" className="block text-xs font-medium text-gray-700 sm:text-sm">
+        <label htmlFor="content" className="block text-xs font-medium text-slate-700 sm:text-sm">
           Message
         </label>
 
@@ -96,7 +96,7 @@ export function TicketCommentForm({ ticketId, canCreateInternalNote }: TicketCom
             canCreateInternalNote ? "Write a reply or internal note..." : "Write your reply..."
           }
           aria-describedby="comment-error"
-          className="mt-2 min-h-32 w-full min-w-0 resize-y rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black transition outline-none placeholder:text-gray-400 focus:border-slate-700 sm:min-h-36 sm:text-sm"
+          className="mt-2 min-h-32 w-full min-w-0 resize-y rounded-lg border border-gray-300 px-3 py-2.5 text-xs text-black transition outline-none placeholder:text-slate-400 focus:border-slate-700 sm:min-h-36 sm:text-sm"
         />
 
         <div id="comment-error" aria-live="polite" className="mt-1">
@@ -144,7 +144,7 @@ export function TicketCommentForm({ ticketId, canCreateInternalNote }: TicketCom
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto 2xl:px-6 2xl:py-3 2xl:text-base"
+          className="w-full rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto 2xl:px-6 2xl:py-3 2xl:text-base"
         >
           {pending ? "Posting..." : "Post Message"}
         </button>
